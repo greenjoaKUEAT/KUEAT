@@ -12,12 +12,12 @@
         android:layout_width="100dp"
         android:layout_height="39dp"
         android:layout_marginLeft="18dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="@dimen/activity_main_title_margin"
+        android:layout_marginBottom="@dimen/activity_main_title_margin"
         android:src="@drawable/kueat" />
     <View
         android:layout_width="match_parent"
-        android:layout_height="3dp"
+        android:layout_height="@dimen/sector_line_height"
         android:background="@drawable/style_sector_line_gradient"/>
 
     <FrameLayout
