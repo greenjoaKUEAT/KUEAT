@@ -5,4 +5,14 @@
     <dimen name="activity_main_title_margin">14dp</dimen>
     <dimen name="sector_line_height">3dp</dimen>
     <dimen name="register_input_layout_height">65dp</dimen>
+
+<!--    fragment_account   -->
+    <dimen name="profile_img_size">55dp</dimen>
+    <dimen name="layout_margin_top">15dp</dimen>
+    <dimen name="layout_margin_horizontal">23dp</dimen>
+    <dimen name="account_title_size">20dp</dimen>
+    <dimen name="account_content_size">15dp</dimen>
+    <dimen name="account_content_padding_vertical">13dp</dimen>
+    <dimen name="account_box_padding_top">15dp</dimen>
+    <dimen name="account_box_padding_horizontal">20dp</dimen>
 </resources>

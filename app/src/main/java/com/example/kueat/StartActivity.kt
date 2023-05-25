@@ -9,7 +9,6 @@ class StartActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartBinding.inflate(layoutInflater)
-        setContentView(R.layout.activity_start)
-
+        setContentView(binding.root)
     }
 }
