@@ -10,26 +10,24 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="26dp"
         android:layout_marginBottom="63dp"
         android:text="뭐 먹지?"
         android:textColor="#000000"
         android:textSize="34sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/Logo" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
         android:layout_marginBottom="50dp"
         android:text="종류를 선택하세요"
-        app:layout_constraintBottom_toTopOf="@+id/imageView6"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toTopOf="@+id/menu_korea"
+        app:layout_constraintStart_toEndOf="@+id/menu_everything" />
 
     <ImageView
         android:id="@+id/Logo"
@@ -42,66 +40,67 @@
         app:srcCompat="@drawable/logo" />
 
     <ImageView
-        android:id="@+id/imageView6"
+        android:id="@+id/menu_korea"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView7"
+        app:layout_constraintEnd_toStartOf="@+id/menu_china"
+        app:layout_constraintStart_toEndOf="@+id/menu_everything"
+        app:layout_constraintTop_toTopOf="@+id/menu_china"
         app:srcCompat="@drawable/menu_korea" />
 
     <ImageView
-        android:id="@+id/imageView9"
+        android:id="@+id/menu_japan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="1dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView8"
+        android:layout_marginTop="25dp"
+        app:layout_constraintEnd_toStartOf="@+id/menu_western"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView8"
+        app:layout_constraintTop_toBottomOf="@+id/menu_everything"
         app:srcCompat="@drawable/menu_japan" />
 
     <ImageView
-        android:id="@+id/imageView8"
+        android:id="@+id/menu_western"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageView10"
-        app:layout_constraintStart_toEndOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView10"
+        app:layout_constraintEnd_toStartOf="@+id/menu_cafe"
+        app:layout_constraintStart_toEndOf="@+id/menu_japan"
+        app:layout_constraintTop_toTopOf="@+id/menu_japan"
         app:srcCompat="@drawable/menu_western" />
 
     <ImageView
-        android:id="@+id/imageView10"
+        android:id="@+id/menu_cafe"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="1dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toBottomOf="@+id/imageView7"
+        app:layout_constraintStart_toEndOf="@+id/menu_western"
+        app:layout_constraintTop_toBottomOf="@+id/menu_china"
         app:srcCompat="@drawable/menu_cafe" />
 
     <ImageView
-        android:id="@+id/imageView5"
+        android:id="@+id/menu_china"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toStartOf="@+id/imageView6"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
-        app:srcCompat="@drawable/menu_everything" />
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
         android:layout_marginBottom="300dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView6"
+        app:layout_constraintStart_toEndOf="@+id/menu_korea"
         app:srcCompat="@drawable/menu_china" />
+
+    <ImageView
+        android:id="@+id/menu_everything"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toStartOf="@+id/menu_korea"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/menu_korea"
+        app:srcCompat="@drawable/menu_everything" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
