@@ -1,6 +1,7 @@
 package com.example.kueat
 
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.example.kueat.databinding.ActivityMainBinding
@@ -20,9 +21,13 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         setContentView(binding.root)
         init()
     }
-    fun init(){
-        binding.navView.setOnItemSelectedListener {
-            onNavigationItemSelected(it)
+    private fun init(){
+        binding.navView.run{
+            setOnItemSelectedListener {
+                onNavigationItemSelected(it)
+            }
+            //초기 화면 홈으로 설정
+            selectedItemId = R.id.navigation_home
         }
     }
 
