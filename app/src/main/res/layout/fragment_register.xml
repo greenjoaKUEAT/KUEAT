@@ -173,11 +173,12 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <ImageButton
-        android:id="@+id/loginBtn"
+        android:id="@+id/registerBtn"
         android:layout_width="251dp"
         android:layout_height="36dp"
         android:layout_marginTop="30dp"
         android:src="@drawable/btn_register_register"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintTop_toBottomOf="@id/nickname_input_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"/>
@@ -188,7 +189,8 @@
         android:layout_height="36dp"
         android:layout_marginTop="7dp"
         android:src="@drawable/btn_back"
+        android:background="?android:attr/selectableItemBackground"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/registerBtn" />
 </androidx.constraintlayout.widget.ConstraintLayout>
