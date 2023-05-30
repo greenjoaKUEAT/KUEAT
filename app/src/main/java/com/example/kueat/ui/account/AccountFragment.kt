@@ -32,17 +32,8 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
-//        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-//            backPressed()
-//        }
         return binding.root
     }
-
-//    private fun backPressed() {
-//        val initIntent = Intent(requireActivity(), MainActivity::class.java)
-//        requireActivity().startActivity(initIntent)
-//    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initText()
