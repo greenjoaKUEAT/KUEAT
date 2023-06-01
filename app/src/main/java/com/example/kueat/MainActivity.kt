@@ -1,9 +1,15 @@
 package com.example.kueat
 
+import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.replace
 import android.util.Log
 import android.view.MenuItem
+import androidx.activity.addCallback
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.navigation.NavController
+import androidx.navigation.fragment.NavHostFragment
 import com.example.kueat.databinding.ActivityMainBinding
 import com.example.kueat.ui.account.AccountFragment
 import com.example.kueat.ui.appeal.AppealFragment
@@ -13,12 +19,15 @@ import com.google.android.material.navigation.NavigationBarView
 
 class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListener {
 
-    private lateinit var binding: ActivityMainBinding
-
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //뒤로가기 버튼 클릭시 호출되는 callBack함수
+        val callback = onBackPressedDispatcher.addCallback(this) {
+            backPressed()
+        }
         init()
     }
     private fun init(){
@@ -41,5 +50,17 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         return true
     }
 
+    fun backPressed() {
+        for(fragment in supportFragmentManager.fragments){
+            if(fragment.isVisible){
+                if(fragment is HomeFragment) {
+                    val initIntent = Intent(this, InitActivity::class.java)
+                    startActivity(initIntent)
+                }else{
+                    binding.navView.selectedItemId = R.id.navigation_home
+                }
+            }
+        }
 
+    }
 }
