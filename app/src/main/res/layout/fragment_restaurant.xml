@@ -9,11 +9,18 @@
     <!--  image view ?  tab -->
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tablayout"
+        app:tabMaxWidth="0dp"
+        app:tabMode="fixed"
+        android:gravity="center_vertical|center_horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/tab_style"
         app:tabTextColor="@color/black"
-        app:tabMode="auto">
+        app:tabBackground="@drawable/tab_selector"
+        app:tabTextAppearance="@style/tabTextSizeBold"
+        app:tabGravity="fill"
+        app:tabIndicatorHeight="0dp"
+        >
 
     </com.google.android.material.tabs.TabLayout>
     <ScrollView
