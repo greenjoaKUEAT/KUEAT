@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.filter.FilterMenuFragment">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="뭐 먹지?"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/menuText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_subtitle_margin_top"
+        android:alpha="0.5"
+        android:text="종류를 선택하세요"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+    <LinearLayout
+        android:id="@+id/all"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/korea"
+        app:layout_constraintEnd_toStartOf="@+id/korea"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/korea">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="다 좋아"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/korea"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_button_margin_top"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/china"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/all"
+        app:layout_constraintTop_toBottomOf="@+id/menuText">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="한식"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/china"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/korea"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/korea"
+        app:layout_constraintTop_toTopOf="@+id/korea">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="중식"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/japan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/usa"
+        app:layout_constraintEnd_toStartOf="@+id/usa"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/usa">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="일식"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/usa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_middle_margin"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/cafe"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/japan"
+        app:layout_constraintTop_toBottomOf="@+id/korea">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="양식"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/cafe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/usa"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/usa"
+        app:layout_constraintTop_toTopOf="@+id/usa">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="카페"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

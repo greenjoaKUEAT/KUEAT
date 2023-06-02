@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.filter.FilterLocFragment">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="어디서 먹지?"
+        android:textColor="@color/black"
+        android:textSize="40dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/locText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_subtitle_margin_top"
+        android:alpha="0.5"
+        android:text="위치를 선택하세요"
+        android:textColor="@color/black"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/title" />
+
+    <LinearLayout
+        android:id="@+id/front"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/mid"
+        app:layout_constraintEnd_toStartOf="@+id/mid"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/mid">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="정문"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/mid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_button_margin_top"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/back"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/front"
+        app:layout_constraintTop_toBottomOf="@+id/locText">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="중문"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/mid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/mid"
+        app:layout_constraintTop_toTopOf="@+id/mid">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="후문"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/side"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/filter_middle_margin"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toStartOf="@+id/sejong"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mid">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="쪽문"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/sejong"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="@+id/side"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/side"
+        app:layout_constraintTop_toTopOf="@+id/side">
+
+        <TextView
+            android:layout_width="@dimen/filter_button_title_width"
+            android:layout_height="wrap_content"
+            android:background="@drawable/style_login_text"
+            android:gravity="center"
+            android:paddingVertical="@dimen/filter_button_title_padding_vertical"
+            android:text="세종대"
+            android:textColor="@color/black"
+            android:textSize="@dimen/filter_button_title_text_size"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/filter_button_margin"
+            android:src="@drawable/location_mark" />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
