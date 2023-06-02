@@ -3,11 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.appeal.AppealFragment"
-    android:orientation="vertical"
-    >
-        <!--  image view ?  -->
+    android:orientation="vertical">
+    <!--  image view ?  tab -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tab_style"
+        app:tabTextColor="@color/black"
+        app:tabMode="auto">
 
+    </com.google.android.material.tabs.TabLayout>
     <ScrollView
         android:id="@+id/scrollView"
         android:fillViewport="true"
@@ -18,19 +26,59 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <FrameLayout
-                android:id="@+id/map_frame"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"/>
 
             <TextView
                 android:id="@+id/textRest"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="음식점 이름"
-                android:textSize="18sp"
+                android:textSize="30sp"
+                android:textStyle="bold"
+                android:textColor="@color/black"
                 />
-            
+            <FrameLayout
+                android:id="@+id/map_frame"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:background="@drawable/style_item_res"/>
+            <LinearLayout
+                android:background="@drawable/style_item_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="메뉴"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"  />
+            </LinearLayout>
+            <LinearLayout
+                android:background="@drawable/style_item_res"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="리뷰"
+                    android:textSize="25sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>>
+
         </LinearLayout>
     </ScrollView>
 
