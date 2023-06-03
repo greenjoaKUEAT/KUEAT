@@ -23,9 +23,6 @@ class FilterMenuFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFilterMenuBinding.inflate(inflater, container, false)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            backPressed()
-        }
         return binding.root
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -61,9 +58,5 @@ class FilterMenuFragment : Fragment() {
     fun changeActivity(){
         val intent = Intent(requireActivity(), MainActivity::class.java)
         requireActivity().startActivity(intent)
-    }
-    fun backPressed(){
-        val fragment = requireActivity().supportFragmentManager
-        fragment.beginTransaction().replace(R.id.init_frm, FilterLocFragment()).commit()
     }
 }
