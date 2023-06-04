@@ -15,7 +15,17 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingTop="10dp"
+                android:indeterminateTint="@color/pink"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
             <TextView
                 android:id="@+id/email_textview"
                 android:layout_width="wrap_content"
@@ -27,16 +37,17 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/email_input_layout"
-                app:layout_constraintStart_toStartOf="@+id/email_input_layout" />
+                app:layout_constraintBottom_toTopOf="@+id/email_input_text"
+                app:layout_constraintStart_toStartOf="@+id/email_input_text" />
             <EditText
-                android:id="@+id/email_input_layout"
+                android:id="@+id/email_input_text"
                 android:layout_width="@dimen/register_edittext_width"
                 android:layout_height="@dimen/register_edittext_height"
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/register_edittext_padding_horizontal"
                 android:background="@drawable/style_login_text"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
+                android:textSize="@dimen/register_edittext_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +83,7 @@
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/email_input_layout"
+                app:layout_constraintTop_toBottomOf="@+id/email_input_text"
                 app:layout_constraintBottom_toTopOf="@+id/password_input_layout"
                 app:layout_constraintStart_toStartOf="@+id/password_input_layout" />
 
@@ -109,22 +120,23 @@
                 android:textSize="15sp"
                 android:textStyle="bold"
                 app:layout_constraintTop_toBottomOf="@+id/password_input_layout"
-                app:layout_constraintBottom_toTopOf="@+id/id_input_layout"
-                app:layout_constraintStart_toStartOf="@+id/id_input_layout" />
+                app:layout_constraintBottom_toTopOf="@+id/id_input_text"
+                app:layout_constraintStart_toStartOf="@+id/id_input_text" />
             <EditText
-                android:id="@+id/id_input_layout"
+                android:id="@+id/id_input_text"
                 android:layout_width="@dimen/register_edittext_width"
                 android:layout_height="@dimen/register_edittext_height"
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/register_edittext_padding_horizontal"
                 android:background="@drawable/style_login_text"
                 android:inputType="text"
+                android:textSize="@dimen/register_edittext_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/id_textview"/>
             <!--    <com.google.android.material.textfield.TextInputLayout-->
-            <!--        android:id="@+id/id_input_layout"-->
+            <!--        android:id="@+id/id_input_text"-->
             <!--        android:layout_width="wrap_content"-->
             <!--        android:layout_height="@dimen/register_edittext_height"-->
             <!--        app:boxStrokeWidth="0dp"-->
@@ -151,23 +163,24 @@
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/id_input_layout"
-                app:layout_constraintBottom_toTopOf="@+id/name_input_layout"
-                app:layout_constraintStart_toStartOf="@+id/name_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/id_input_text"
+                app:layout_constraintBottom_toTopOf="@+id/name_input_text"
+                app:layout_constraintStart_toStartOf="@+id/name_input_text" />
             <EditText
-                android:id="@+id/name_input_layout"
+                android:id="@+id/name_input_text"
                 android:layout_width="@dimen/register_edittext_width"
                 android:layout_height="@dimen/register_edittext_height"
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/register_edittext_padding_horizontal"
                 android:background="@drawable/style_login_text"
                 android:inputType="text"
+                android:textSize="@dimen/register_edittext_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/name_textview"/>
             <!--    <com.google.android.material.textfield.TextInputLayout-->
-            <!--        android:id="@+id/name_input_layout"-->
+            <!--        android:id="@+id/name_input_text"-->
             <!--        android:layout_width="wrap_content"-->
             <!--        android:layout_height="@dimen/register_edittext_height"-->
             <!--        app:boxStrokeWidth="0dp"-->
@@ -195,23 +208,24 @@
                 android:textColor="@color/black"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@+id/name_input_layout"
-                app:layout_constraintBottom_toTopOf="@+id/nickname_input_layout"
-                app:layout_constraintStart_toStartOf="@+id/nickname_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/name_input_text"
+                app:layout_constraintBottom_toTopOf="@+id/nickname_input_text"
+                app:layout_constraintStart_toStartOf="@+id/nickname_input_text" />
             <EditText
-                android:id="@+id/nickname_input_layout"
+                android:id="@+id/nickname_input_text"
                 android:layout_width="@dimen/register_edittext_width"
                 android:layout_height="@dimen/register_edittext_height"
                 android:layout_gravity="center"
                 android:paddingHorizontal="@dimen/register_edittext_padding_horizontal"
                 android:background="@drawable/style_login_text"
                 android:inputType="text"
+                android:textSize="@dimen/register_edittext_textsize"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/nickname_textview"/>
             <!--    <com.google.android.material.textfield.TextInputLayout-->
-            <!--        android:id="@+id/nickname_input_layout"-->
+            <!--        android:id="@+id/nickname_input_text"-->
             <!--        android:layout_width="wrap_content"-->
             <!--        android:layout_height="@dimen/register_edittext_height"-->
             <!--        app:boxStrokeWidth="0dp"-->
@@ -236,7 +250,7 @@
                 android:layout_marginTop="30dp"
                 android:src="@drawable/btn_register_register"
                 android:background="?android:attr/selectableItemBackground"
-                app:layout_constraintTop_toBottomOf="@id/nickname_input_layout"
+                app:layout_constraintTop_toBottomOf="@id/nickname_input_text"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"/>
 
@@ -250,7 +264,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/registerBtn" />
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
-
 </androidx.constraintlayout.widget.ConstraintLayout>
