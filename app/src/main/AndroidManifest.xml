@@ -34,7 +34,7 @@
         </activity>
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
-            android:value="ef6uqvfthf"/>
+            android:value="${naverMapApiKey}"/>
 
     </application>
 

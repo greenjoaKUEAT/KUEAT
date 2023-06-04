@@ -3,6 +3,9 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
 }
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def NaverMapAPIKEY = properties.getProperty('Naver_Map_API_KEY')
 
 android {
     buildFeatures{
@@ -19,6 +22,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders = [naverMapApiKey:NaverMapAPIKEY]
     }
 
     buildTypes {

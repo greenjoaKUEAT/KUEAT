@@ -45,11 +45,13 @@
                 android:textStyle="bold"
                 android:textColor="@color/black"
                 />
+
             <FrameLayout
                 android:id="@+id/map_frame"
                 android:layout_width="match_parent"
-                android:layout_height="1000dp"
-                android:background="@drawable/style_item_res"/>
+                android:layout_height="50dp"
+                android:background="@drawable/style_item_res" />
+
             <LinearLayout
                 android:background="@drawable/style_item_res"
                 android:layout_width="match_parent"

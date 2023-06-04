@@ -19,6 +19,7 @@ import androidx.fragment.app.activityViewModels
 import com.example.kueat.*
 import com.example.kueat.databinding.FragmentAccountBinding
 import com.example.kueat.ui.home.HomeFragment
+import com.example.kueat.ui.home.RestaurantFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -63,6 +64,13 @@ class AccountFragment : Fragment() {
                 val intent = Intent(requireActivity(),StartActivity::class.java)
                 startActivity(intent)
             }
+            testRest.setOnClickListener {
+                val fragment
+                        = requireActivity().supportFragmentManager.beginTransaction()
+                val restFragment = RestaurantFragment()
+                fragment.replace(R.id.main_frm,restFragment)
+                fragment.commit()
+            }
         }
     }
 
@@ -87,5 +95,7 @@ class AccountFragment : Fragment() {
         textAppeal.text = builderAppeal
         textReview.text = builderReview
         textComment.text = builderComment
+
+
     }
 }
