@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.addCallback
+import androidx.core.app.ActivityCompat.finishAffinity
 import com.example.kueat.MainActivity
 import com.example.kueat.R
 import com.example.kueat.StartActivity
@@ -23,9 +24,6 @@ class FilterLocFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentFilterLocBinding.inflate(inflater, container, false)
-        val callback = requireActivity().onBackPressedDispatcher.addCallback(this) {
-            backPressed()
-        }
         return binding.root
     }
 
@@ -56,9 +54,5 @@ class FilterLocFragment : Fragment() {
     fun changeFragment(){
         val fragment = requireActivity().supportFragmentManager
         fragment.beginTransaction().replace(R.id.init_frm, FilterMenuFragment()).commit()
-    }
-    fun backPressed(){
-        val intent = Intent(requireActivity(), StartActivity::class.java)
-        requireActivity().startActivity(intent)
     }
 }
