@@ -36,6 +36,10 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
 
     private fun initLayout() {
         initTab()
+        val fragment = childFragmentManager.beginTransaction()
+        val naverfragment = NaverFragment()
+        fragment.add(R.id.map_frame,naverfragment)
+        fragment.commit()
         binding.apply {
             tablayout.addOnTabSelectedListener(this@RestaurantFragment)
             scrollView.setOnScrollChangeListener(this@RestaurantFragment)

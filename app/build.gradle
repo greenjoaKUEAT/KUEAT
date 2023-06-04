@@ -5,7 +5,7 @@ plugins {
 }
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
-def NaverMapAPIKEY = properties.getProperty('Naver_Map_API_KEY')
+def naverMapAPIKEY = properties.getProperty('Naver_Map_API_KEY')
 
 android {
     buildFeatures{
@@ -16,13 +16,13 @@ android {
 
     defaultConfig {
         applicationId "com.example.kueat"
+        manifestPlaceholders = [naverMapApiKey:naverMapAPIKEY]
         minSdk 30
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        manifestPlaceholders = [naverMapApiKey:NaverMapAPIKEY]
     }
 
     buildTypes {
