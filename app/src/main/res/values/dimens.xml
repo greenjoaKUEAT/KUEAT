@@ -4,15 +4,29 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_main_title_margin">14dp</dimen>
     <dimen name="sector_line_height">3dp</dimen>
-    <dimen name="register_input_layout_height">65dp</dimen>
+
+<!--    fragment_login,register-->
+    <dimen name="register_edittext_width">255dp</dimen>
+    <dimen name="register_edittext_height">55dp</dimen>
+    <dimen name="register_edittext_padding_horizontal">15dp</dimen>
+    <dimen name="register_edittext_textsize">17sp</dimen>
 
 <!--    fragment_account   -->
     <dimen name="profile_img_size">55dp</dimen>
     <dimen name="layout_margin_top">15dp</dimen>
     <dimen name="layout_margin_horizontal">23dp</dimen>
-    <dimen name="account_title_size">20dp</dimen>
-    <dimen name="account_content_size">15dp</dimen>
+    <dimen name="account_title_size">20sp</dimen>
+    <dimen name="account_content_size">15sp</dimen>
     <dimen name="account_content_padding_vertical">13dp</dimen>
     <dimen name="account_box_padding_top">15dp</dimen>
     <dimen name="account_box_padding_horizontal">20dp</dimen>
+
+<!--    frgment_filter-->
+    <dimen name="filter_button_title_width">110dp</dimen>
+    <dimen name="filter_button_title_padding_vertical">3dp</dimen>
+    <dimen name="filter_button_title_text_size">20dp</dimen>
+    <dimen name="filter_button_margin">10dp</dimen>
+    <dimen name="filter_button_margin_top">30dp</dimen>
+    <dimen name="filter_subtitle_margin_top">56dp</dimen>
+    <dimen name="filter_middle_margin">50dp</dimen>
 </resources>

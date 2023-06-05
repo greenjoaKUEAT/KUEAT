@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "914791432076",
+    "project_id": "kueat-38fcd",
+    "storage_bucket": "kueat-38fcd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:914791432076:android:1fa3c85a72297a29c020a9",
+        "android_client_info": {
+          "package_name": "com.example.kueat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "914791432076-74p3uk65f4vrsg6opk3n82hliouadb4r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBLHNY0G8oUGlRRQ6yLPguQrhrMrpgeYaU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "914791432076-74p3uk65f4vrsg6opk3n82hliouadb4r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -11,6 +11,7 @@
     <string name="nickname">닉네임</string>
     <string name="recommend_restaurant">맛집 추천하기</string>
 
+    <string name="password_hint">영문,숫자 포함 8자리 이상</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
