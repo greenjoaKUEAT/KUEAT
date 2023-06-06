@@ -2,11 +2,10 @@ package com.example.kueat.ui.appeal
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ItemAppealArticleBinding
 
-class AppealAdapter(val items: ArrayList<AppealArticle>) : RecyclerView.Adapter<AppealAdapter.ViewHolder>() {
+class AppealArticleAdapter(val items: ArrayList<AppealArticleInfo>) : RecyclerView.Adapter<AppealArticleAdapter.ViewHolder>() {
 
     var OnItemClickListener: onItemClickListener? = null
 
@@ -27,12 +26,12 @@ class AppealAdapter(val items: ArrayList<AppealArticle>) : RecyclerView.Adapter<
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppealAdapter.ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppealArticleAdapter.ViewHolder {
         val binding = ItemAppealArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AppealAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AppealArticleAdapter.ViewHolder, position: Int) {
         holder.bind(position)
     }
 
