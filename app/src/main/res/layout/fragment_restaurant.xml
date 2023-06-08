@@ -49,7 +49,7 @@
             <FrameLayout
                 android:id="@+id/map_frame"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="300dp"
                 android:background="@drawable/style_item_res" />
 
             <LinearLayout
@@ -69,7 +69,7 @@
                     />
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"  />
+                    android:layout_height="200dp"  />
             </LinearLayout>
             <LinearLayout
                 android:background="@drawable/style_item_res"
@@ -88,7 +88,7 @@
                     />
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="508dp"
                     />
             </LinearLayout>
 
