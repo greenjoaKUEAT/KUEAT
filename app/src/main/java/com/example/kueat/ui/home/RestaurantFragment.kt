@@ -9,10 +9,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
+import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import kotlin.math.abs
 
 class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScrollChangeListener{
@@ -20,6 +25,10 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     lateinit var tab1 : TabLayout.Tab
     lateinit var tab2 : TabLayout.Tab
     lateinit var tab3 : TabLayout.Tab
+    lateinit var layoutManager: LinearLayoutManager
+    lateinit var adapter :MyReviewAdapter
+    lateinit var rdb : DatabaseReference
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,6 +52,19 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         binding.apply {
             tablayout.addOnTabSelectedListener(this@RestaurantFragment)
             scrollView.setOnScrollChangeListener(this@RestaurantFragment)
+        }
+        layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
+        rdb = Firebase.database.getReference("KueatDB/")
+        val query = rdb.limitToLast(50)
+        val option = FirebaseRecyclerOptions.Builder<review>()
+            .setQuery(query,review::class.java).build()
+        adapter = MyReviewAdapter(option)
+        adapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
+            override fun OnItemClick(pos: Int) {
+                // Review 창으로 이동
+
+            }
+
         }
 
     }
