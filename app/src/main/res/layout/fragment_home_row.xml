@@ -6,13 +6,13 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/editTextText"
+        android:id="@+id/restaurant_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
         android:background="@null"
         android:inputType="text"
-        android:text="내 위치로부터 300m" />
+        android:text="내 위치로부터 {distance}m" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/restaurant_image"
             android:layout_width="50dp"
             android:layout_height="50dp" />
 
@@ -36,7 +36,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/editTextText2"
+                    android:id="@+id/restaurant_name"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
@@ -49,16 +49,23 @@
                     android:layout_weight="1" />
 
                 <TextView
+                    android:id="@+id/restaurant_Location_tag"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="#맛집#오예"
+                    android:text="#위치"
+                    android:layout_gravity="right"/>
+                <TextView
+                    android:id="@+id/restaurant_Menu_tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="#메뉴"
                     android:layout_gravity="right"/>
             </LinearLayout>
 
 
             <TextView
-                android:id="@+id/editTextText3"
-                android:layout_width="wrap_content"
+                android:id="@+id/restaurant_rep_menu"
+                android:layout_width="match_parent"
                 android:layout_height="25dp"
                 android:text="Name" />
 
