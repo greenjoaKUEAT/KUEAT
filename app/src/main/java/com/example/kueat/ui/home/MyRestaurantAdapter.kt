@@ -7,8 +7,8 @@ import com.example.kueat.databinding.ReviewrowBinding
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class MyReviewAdapter(options:FirebaseRecyclerOptions<Review>)
-    : FirebaseRecyclerAdapter<Review, MyReviewAdapter.ViewHolder>(options){
+class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>)
+    : FirebaseRecyclerAdapter<Restaurant, MyRestaurantAdapter.ViewHolder>(options){
     interface OnItemClickListener {
         fun OnItemClick(pos: Int)
     }
@@ -30,13 +30,10 @@ class MyReviewAdapter(options:FirebaseRecyclerOptions<Review>)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Review) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Restaurant) {
         holder.binding.apply {
             // 초기화 작업
-            reviewTitle.text = model.title.toString()
-            reviewContent.text = model.content.toString()
-            likeNum.text = model.liked_user_number.toString()
-            commentNum.text = model.comment_number.toString()
+            //실제로 표시될 데이터 필요없음
         }
     }
 

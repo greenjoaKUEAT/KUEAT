@@ -29,7 +29,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     lateinit var adapter :MyReviewAdapter
     lateinit var rdb : DatabaseReference
     // 임시 intent
-    val rest_id = 1;
+    var rest_id = 1;
     var tabUser = true
     var scrollUser = true
     override fun onCreateView(
@@ -50,8 +50,11 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         initTab()
         val fragment = childFragmentManager.beginTransaction()
         val naverfragment = NaverFragment()
-        fragment.add(R.id.map_frame,naverfragment)
-        fragment.commit()
+        val bundle  = Bundle()
+
+        bundle.putString("rest_id",rest_id.toString())
+        naverfragment.arguments = bundle
+        parentFragmentManager.beginTransaction().replace(R.id.map_frame,naverfragment).commit()
         binding.apply {
             tablayout.addOnTabSelectedListener(this@RestaurantFragment)
             scrollView.setOnScrollChangeListener(this@RestaurantFragment)
@@ -59,8 +62,8 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         rdb = Firebase.database.getReference("KueatDB/Article")
         val query = rdb.limitToLast(50)
-        val option = FirebaseRecyclerOptions.Builder<review>()
-            .setQuery(query,review::class.java).build()
+        val option = FirebaseRecyclerOptions.Builder<Review>()
+            .setQuery(query,Review::class.java).build()
         adapter = MyReviewAdapter(option)
         adapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
