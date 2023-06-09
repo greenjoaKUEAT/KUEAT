@@ -9,14 +9,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.android.gms.tasks.Task
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlin.math.abs
 
@@ -31,10 +36,15 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     lateinit var menuadapter: MyMenuAdapter
     lateinit var dbMenu : DatabaseReference
     lateinit var dbReview : DatabaseReference
+    lateinit var dbULike : DatabaseReference
+    val user = Firebase.auth.currentUser
     // 임시 intent
     var rest_id = 1;
     var tabUser = true
     var scrollUser = true
+    var isLiked = false
+    var likedid:String = ""
+    lateinit var item :Task<DataSnapshot>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -57,9 +67,28 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         bundle.putString("rest_id",rest_id.toString())
         naverfragment.arguments = bundle
         parentFragmentManager.beginTransaction().replace(R.id.map_frame,naverfragment).commit()
+
+        dbULike = Firebase.database.getReference("KueatDB/LikedRestaurant")
+        val key = rest_id.toString() + user!!.uid
+        dbULike.child(key).get().addOnSuccessListener {
+            binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
+            isLiked = true
+        }
+
         binding!!.apply {
             tablayout.addOnTabSelectedListener(this@RestaurantFragment)
             scrollView.setOnScrollChangeListener(this@RestaurantFragment)
+            likebtn.setOnClickListener {
+                if(isLiked){ // 좋아요 취소
+                    dbULike.child(key).removeValue()
+                    binding!!.likebtn.setImageResource(R.drawable.tap_like_cpy)
+                    isLiked = false
+                }else {// 좋아요
+                    dbULike.child(key).push().setValue(Likedrest(rest_id.toString(),user!!.uid,key))
+                    binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
+                    isLiked = true
+                }
+            }
         }
         /*메뉴*/
         MenulayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
