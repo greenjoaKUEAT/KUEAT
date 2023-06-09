@@ -5,11 +5,12 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.ActivityAppealArticleDetailBinding
+import com.example.kueat.`object`.Comment
 
 class AppealArticleDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityAppealArticleDetailBinding
     lateinit var adapter: AppealArticleCommentAdapter
-    lateinit var dataList: ArrayList<AppealArticleCommentInfo>
+    lateinit var dataList: ArrayList<Comment>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAppealArticleDetailBinding.inflate(layoutInflater)
@@ -30,7 +31,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
 
     fun initData() {
         dataList = arrayListOf(
-            AppealArticleCommentInfo(
+            Comment(
                 0,
                 0,
                 0,
@@ -40,7 +41,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 "05/12 20:12"
             ),
 
-            AppealArticleCommentInfo(
+            Comment(
                 0,
                 0,
                 0,
@@ -49,7 +50,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 0,
                 "05/12 20:12"
             ),
-            AppealArticleCommentInfo(
+            Comment(
                 0,
                 0,
                 0,
@@ -58,7 +59,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 0,
                 "05/12 20:12"
             ),
-            AppealArticleCommentInfo(
+            Comment(
                 0,
                 0,
                 0,

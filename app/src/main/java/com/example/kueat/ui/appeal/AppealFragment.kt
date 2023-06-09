@@ -8,12 +8,13 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.databinding.FragmentAppealBinding
+import com.example.kueat.`object`.Article
 
 class AppealFragment : Fragment() {
 
     lateinit var binding: FragmentAppealBinding
     lateinit var adapter: AppealArticleAdapter
-    lateinit var dataList: ArrayList<AppealArticleInfo>
+    lateinit var dataList: ArrayList<Article>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,7 +46,7 @@ class AppealFragment : Fragment() {
 
     fun initData(){
         dataList = arrayListOf(
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -56,7 +57,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -67,7 +68,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -78,7 +79,7 @@ class AppealFragment : Fragment() {
                 4,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -89,7 +90,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -100,7 +101,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -111,7 +112,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -122,7 +123,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -133,7 +134,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,
@@ -144,7 +145,7 @@ class AppealFragment : Fragment() {
                 1,
                 "05/12 20:12"
             ),
-            AppealArticleInfo(
+            Article(
                 0,
                 0,
                 0,

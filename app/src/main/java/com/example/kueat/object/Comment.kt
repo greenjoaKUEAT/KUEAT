@@ -1,6 +1,6 @@
-package com.example.kueat.ui.appeal
+package com.example.kueat.`object`
 
-data class AppealArticleCommentInfo(
+data class Comment(
     var comment_id: Int,
     var user_id: Int,
     var article_id: Int,
@@ -8,5 +8,6 @@ data class AppealArticleCommentInfo(
     var liked_user_number: Int,
     var type: Int, //0-댓글, 1-대댓글
     var date: String
-)
-
+) {
+    constructor() : this(-1, -1, -1, "no info", -1, -1, "no info")
+}

@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ItemAppealArticleBinding
+import com.example.kueat.`object`.Article
 
-class AppealArticleAdapter(val items: ArrayList<AppealArticleInfo>) : RecyclerView.Adapter<AppealArticleAdapter.ViewHolder>() {
+class AppealArticleAdapter(val items: ArrayList<Article>) : RecyclerView.Adapter<AppealArticleAdapter.ViewHolder>() {
 
     var OnItemClickListener: onItemClickListener? = null
 
@@ -17,7 +18,7 @@ class AppealArticleAdapter(val items: ArrayList<AppealArticleInfo>) : RecyclerVi
         fun bind(position: Int){
             val article = items[position]
             binding.tvAppealArticleTitle.text = article.title
-            binding.tvAppealArticleDescription.text = article.description
+            binding.tvAppealArticleDescription.text = article.content
             binding.tvAppealArticleLike.text = article.liked_user_number.toString()
             binding.tvAppealArticleComment.text = article.comment_number.toString()
             binding.llAppealArticle.setOnClickListener {

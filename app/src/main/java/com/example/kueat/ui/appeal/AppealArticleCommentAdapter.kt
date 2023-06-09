@@ -4,8 +4,9 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ItemAppealArticleCommentBinding
+import com.example.kueat.`object`.Comment
 
-class AppealArticleCommentAdapter(var items: ArrayList<AppealArticleCommentInfo>) : RecyclerView.Adapter<AppealArticleCommentAdapter.ViewHolder>() {
+class AppealArticleCommentAdapter(var items: ArrayList<Comment>) : RecyclerView.Adapter<AppealArticleCommentAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(position: Int){

@@ -4,12 +4,12 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ReviewrowBinding
-import com.example.kueat.`object`.Review
+import com.example.kueat.`object`.Article
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class MyReviewAdapter(options:FirebaseRecyclerOptions<Review>)
-    : FirebaseRecyclerAdapter<Review, MyReviewAdapter.ViewHolder>(options){
+class MyReviewAdapter(options:FirebaseRecyclerOptions<Article>)
+    : FirebaseRecyclerAdapter<Article, MyReviewAdapter.ViewHolder>(options){
     interface OnItemClickListener {
         fun OnItemClick(pos: Int)
     }
@@ -31,11 +31,11 @@ class MyReviewAdapter(options:FirebaseRecyclerOptions<Review>)
         return ViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Review) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Article) {
         holder.binding.apply {
             // 초기화 작업
             reviewTitle.text = model.title.toString()
-            reviewContent.text = model.content.toString()
+            reviewContent.text = model.content
             likeNum.text = model.liked_user_number.toString()
             commentNum.text = model.comment_number.toString()
         }
