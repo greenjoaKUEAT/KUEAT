@@ -2,6 +2,7 @@ package com.example.kueat.ui.register
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.SystemClock
 import android.text.TextUtils
@@ -17,12 +18,16 @@ import com.example.kueat.MainActivity
 import com.example.kueat.R
 import com.example.kueat.StartActivity
 import com.example.kueat.databinding.FragmentRegisterBinding
+import com.example.kueat.`object`.User
 import com.example.kueat.ui.filter.FilterLocFragment
 import com.example.kueat.ui.filter.FilterMenuFragment
 import com.example.kueat.ui.login.LoginFragment
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.auth.ktx.userProfileChangeRequest
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.util.regex.Pattern
 
@@ -31,6 +36,7 @@ class RegisterFragment : Fragment() {
     lateinit var binding: FragmentRegisterBinding
     private lateinit var auth: FirebaseAuth
     lateinit var inputManager: InputMethodManager
+    lateinit var kueatDB: DatabaseReference
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +48,14 @@ class RegisterFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initDB()
         initBtn()
         inputManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         auth = Firebase.auth
+    }
+
+    private fun initDB() {
+        kueatDB = Firebase.database.getReference("KueatDB/User")
     }
 
     private fun initBtn() {
@@ -83,7 +94,7 @@ class RegisterFragment : Fragment() {
                         Log.d("registerFragment", "createUserWithEmail:success")
                         Toast.makeText(context, "회원가입 성공", Toast.LENGTH_SHORT,).show()
                         val user = auth.currentUser
-                        updateUI(user, email, password, id, name, nickname)
+                        updateUI(user, email, name, nickname, id)
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w("registerFragment", "createUserWithEmail:failure", task.exception)
@@ -94,7 +105,7 @@ class RegisterFragment : Fragment() {
                             is FirebaseTooManyRequestsException -> Toast.makeText(context,"잠시후 다시 시도해주세요.", Toast.LENGTH_SHORT,).show()
                             else -> clearText()
                         }
-                        updateUI(null, email, password, id, name, nickname)
+                        updateUI(null, email, name, nickname, id)
                     }
 
                 }
@@ -109,18 +120,32 @@ class RegisterFragment : Fragment() {
     private fun hideProgressBar() {
         binding.progressBar.visibility = View.GONE
     }
-    private fun updateUI(user: FirebaseUser?,email: String, password: String,id:String,name:String,nickname:String) {
+    private fun updateUI(user: FirebaseUser?,email: String,name:String,nickname:String,id:String) {
         hideProgressBar()
         if (user != null) {
-            updateUserInfo(email, password,id,name,nickname)
+            updateUserInfo(email,name,nickname,id)
             changeFragment()
         }else {
             clearText()
         }
     }
 
-    private fun updateUserInfo(email: String, password: String,id:String,name:String,nickname:String) {
+    private fun updateUserInfo(email: String,name:String,nickname:String,id:String) {
         // firebase에 기본 유저 정보는 이메일, 비번, 프로필 사진, 이메일 유효 정보, 정도만 저장되기에 따로 db에 정보 저장해 나머지 학번,이름,닉네임을 저장해야 함.
+        val user = Firebase.auth.currentUser
+        val userInfo = user?.let { User(it.uid,email,name,nickname,id) }
+
+        val profileUpdates = userProfileChangeRequest {
+            displayName = name
+        }
+
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d("registerFragment", "User profile updated.")
+                    user?.uid?.let { kueatDB.child(it).setValue(userInfo) }
+                }
+            }
     }
 
     private fun clearText() {

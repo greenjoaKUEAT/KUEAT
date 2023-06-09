@@ -5,8 +5,8 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:windowSoftInputMode="adjustResize|adjustPan"
     tools:context=".ui.register.RegisterFragment" >
+<!--    android:windowSoftInputMode="adjustPan|stateHidden"-->
 
     <ScrollView
         android:layout_width="match_parent"
