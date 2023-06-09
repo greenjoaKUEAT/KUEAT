@@ -1,4 +1,4 @@
-package com.example.kueat.ui.home
+package com.example.kueat.`object`
 
 data class Menu(var content :String, var name : String, var price:String,var restaurant_id:String,
                 var restaurant_name:String,var signature:String)  {

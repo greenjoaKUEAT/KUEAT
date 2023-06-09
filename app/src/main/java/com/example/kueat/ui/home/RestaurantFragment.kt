@@ -1,27 +1,24 @@
 package com.example.kueat.ui.home
 
 import android.graphics.Rect
-import android.os.Binder
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
-import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
+import com.example.kueat.`object`.Menu
+import com.example.kueat.`object`.Review
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlin.math.abs
 
@@ -95,7 +92,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         dbMenu = Firebase.database.getReference("KueatDB/Menu")
         var query = dbMenu.orderByChild("restaurant_id").equalTo(rest_id.toString())
         val optionMenu = FirebaseRecyclerOptions.Builder<Menu>()
-            .setQuery(query,Menu::class.java).build()
+            .setQuery(query, Menu::class.java).build()
         menuadapter = MyMenuAdapter(optionMenu)
 
         /*리뷰*/
@@ -103,7 +100,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         dbReview = Firebase.database.getReference("KueatDB/Article")
         query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toString())
         val optionReview = FirebaseRecyclerOptions.Builder<Review>()
-            .setQuery(query,Review::class.java).build()
+            .setQuery(query, Review::class.java).build()
         reviewadapter = MyReviewAdapter(optionReview)
         reviewadapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
