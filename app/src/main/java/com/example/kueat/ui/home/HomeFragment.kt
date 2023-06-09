@@ -60,9 +60,9 @@ class HomeFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         rdb = Firebase.database.getReference("KueatDB/Restaurant")
-
+        Log.d("HI",rdb.database.toString())
         val query = rdb.limitToLast(50)
-//        val query=rdb.orderByChild("tag").equalTo("${Loc}${Menu}")
+//      val query=rdb.orderByChild("tag").equalTo("${Loc}${Menu}")
         val option = FirebaseRecyclerOptions.Builder<Restaurant>()
             .setQuery(query, Restaurant::class.java)
             .build()

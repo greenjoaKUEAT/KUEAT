@@ -67,7 +67,7 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
 
         holder.binding.apply {
 
-            val restaurantLocation = LatLng(model.location.latitude, model.location.longitude) // 식당 위치 정보
+            val restaurantLocation = LatLng(model.location.Latitude, model.location.Longitude) // 식당 위치 정보
             if (currentLocation != null) {
                 val distance = getDistance(currentLocation!!, restaurantLocation)
                 restaurantDistance.text = "내 위치로부터 ${distance}m"
