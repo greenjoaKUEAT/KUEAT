@@ -78,7 +78,6 @@ class HomeFragment : Fragment() {
                 fragment2.setArguments(bundle) //번들을 프래그먼트2로 보낼 준비
                 transaction.replace(com.example.kueat.R.id.init_frm, fragment2)
                 transaction.commit()
-                
                  */
             }
 
@@ -92,6 +91,15 @@ class HomeFragment : Fragment() {
     }
 
 
+    override fun onStart() {
+        super.onStart()
+        adapter.startListening()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        adapter.stopListening()
+    }
 }
 
 

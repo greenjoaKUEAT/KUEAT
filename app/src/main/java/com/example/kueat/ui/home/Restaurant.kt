@@ -10,4 +10,6 @@ data class Restaurant(val article_number:Int,val location:location, val name:Str
     )
 }
 
-data class location(val Latitude:Double, val Longitude:Double)
+data class location(val Latitude:Double, val Longitude:Double){
+    constructor():this(37.0,137.5)
+}
