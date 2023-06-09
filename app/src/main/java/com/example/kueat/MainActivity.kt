@@ -18,6 +18,7 @@ import com.example.kueat.ui.account.EditNicknameFragment
 import com.example.kueat.ui.account.EditPasswordFragment
 import com.example.kueat.ui.appeal.AppealFragment
 import com.example.kueat.ui.home.HomeFragment
+import com.example.kueat.ui.home.RestaurantFragment
 import com.example.kueat.ui.like.LikeFragment
 import com.example.kueat.viewmodel.MyUserModel
 import com.google.android.material.navigation.NavigationBarView

@@ -24,10 +24,12 @@ import com.example.kueat.*
 import com.example.kueat.databinding.FragmentAccountBinding
 import com.example.kueat.`object`.User
 import com.example.kueat.ui.home.HomeFragment
+import com.example.kueat.ui.home.RestaurantFragment
 import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.EmailAuthProvider
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthRecentLoginRequiredException
 import com.google.firebase.auth.ktx.auth
@@ -80,6 +82,13 @@ class AccountFragment : Fragment() {
             }
             textOut.setOnClickListener{
                 outAlertDlg()
+            }
+            testRest.setOnClickListener {
+                val fragment
+                        = requireActivity().supportFragmentManager.beginTransaction()
+                val restFragment = RestaurantFragment()
+                fragment.replace(R.id.main_frm,restFragment)
+                fragment.commit()
             }
         }
     }
@@ -188,5 +197,7 @@ class AccountFragment : Fragment() {
         textAppeal.text = builderAppeal
         textReview.text = builderReview
         textComment.text = builderComment
+
+
     }
 }

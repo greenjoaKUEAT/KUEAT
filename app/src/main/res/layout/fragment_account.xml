@@ -271,6 +271,7 @@
                     android:textColor="@color/black"
                     android:text="스크롤 테스트(삭제예정)" />
                 <TextView
+                    android:id="@+id/testRest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
