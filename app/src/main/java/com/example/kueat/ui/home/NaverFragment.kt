@@ -20,7 +20,6 @@ import com.naver.maps.map.overlay.Marker
 class NaverFragment : Fragment() , OnMapReadyCallback{
 
     lateinit var binding: FragmentNaverBinding
-    lateinit var adapter :MyRestaurantAdapter
     lateinit var rdb : DatabaseReference
     var rest_id = 0
     var loc = ""
@@ -37,10 +36,10 @@ class NaverFragment : Fragment() , OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState)
         binding.navermap.onStart()
         rdb = Firebase.database.getReference("KueatDB/Restaurant")
-        val query = rdb.orderByChild("restaurant_id").equalTo(rest_id.toString())
-        val option=FirebaseRecyclerOptions.Builder<Restaurant>().setQuery(query,Restaurant::class.java).build()
-        adapter = MyRestaurantAdapter(option)
-        loc = adapter.getItem(0).location
+        rdb.get().addOnSuccessListener {
+            val map = it.child(rest_id.toString()).getValue() as HashMap<String,Any>
+            loc = map.get("location").toString()
+        }
 
     }
     override fun onMapReady(naverMap: NaverMap) {

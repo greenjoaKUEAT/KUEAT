@@ -21,13 +21,16 @@ import com.google.firebase.ktx.Firebase
 import kotlin.math.abs
 
 class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScrollChangeListener{
-    lateinit var binding:FragmentRestaurantBinding
+    var binding:FragmentRestaurantBinding ?=null
     lateinit var tab1 : TabLayout.Tab
     lateinit var tab2 : TabLayout.Tab
     lateinit var tab3 : TabLayout.Tab
-    lateinit var layoutManager: LinearLayoutManager
-    lateinit var adapter :MyReviewAdapter
-    lateinit var rdb : DatabaseReference
+    lateinit var MenulayoutManager: LinearLayoutManager
+    lateinit var ReviewlayoutManager: LinearLayoutManager
+    lateinit var reviewadapter :MyReviewAdapter
+    lateinit var menuadapter: MyMenuAdapter
+    lateinit var dbMenu : DatabaseReference
+    lateinit var dbReview : DatabaseReference
     // 임시 intent
     var rest_id = 1;
     var tabUser = true
@@ -38,7 +41,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,33 +51,50 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
 
     private fun initLayout() {
         initTab()
-        val fragment = childFragmentManager.beginTransaction()
+//        val fragment = childFragmentManager.beginTransaction()
         val naverfragment = NaverFragment()
         val bundle  = Bundle()
-
         bundle.putString("rest_id",rest_id.toString())
         naverfragment.arguments = bundle
         parentFragmentManager.beginTransaction().replace(R.id.map_frame,naverfragment).commit()
-        binding.apply {
+        binding!!.apply {
             tablayout.addOnTabSelectedListener(this@RestaurantFragment)
             scrollView.setOnScrollChangeListener(this@RestaurantFragment)
         }
-        layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
-        rdb = Firebase.database.getReference("KueatDB/Article")
-        val query = rdb.limitToLast(50)
-        val option = FirebaseRecyclerOptions.Builder<Review>()
+        /*메뉴*/
+        MenulayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
+        dbMenu = Firebase.database.getReference("KueatDB/Menu")
+        var query = dbMenu.orderByChild("restaurant_id").equalTo(rest_id.toString())
+        val optionMenu = FirebaseRecyclerOptions.Builder<Menu>()
+            .setQuery(query,Menu::class.java).build()
+        menuadapter = MyMenuAdapter(optionMenu)
+
+        /*리뷰*/
+        ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
+        dbReview = Firebase.database.getReference("KueatDB/Article")
+        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toString())
+        val optionReview = FirebaseRecyclerOptions.Builder<Review>()
             .setQuery(query,Review::class.java).build()
-        adapter = MyReviewAdapter(option)
-        adapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
+        reviewadapter = MyReviewAdapter(optionReview)
+        reviewadapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
                 // Review 창으로 이동, 이동하면서 review id 넘기고 댓글 받아와야함
 
             }
         }
+        binding!!.menurecyclerView.layoutManager = MenulayoutManager
+        binding!!.menurecyclerView.adapter = menuadapter
+
+        binding!!.reviewrecyclerView.layoutManager = ReviewlayoutManager
+        binding!!.reviewrecyclerView.adapter = reviewadapter
+
+        menuadapter.startListening()
+        reviewadapter.startListening()
+
     }
 
     private fun initTab() {
-        binding.apply {
+        binding!!.apply {
             tab1 = tablayout.newTab()
             tab2 = tablayout.newTab()
             tab3 = tablayout.newTab()
@@ -92,13 +112,13 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             scrollUser = false
             when (tab?.position) {
                 0 -> {
-                    binding.scrollView.scrollToView(binding.textRest)
+                    binding!!.scrollView.scrollToView(binding!!.textRest)
                 }
                 1 -> {
-                    binding.scrollView.scrollToView(binding.textMenu)
+                    binding!!.scrollView.scrollToView(binding!!.textMenu)
                 }
                 2 -> {
-                    binding.scrollView.scrollToView(binding.textReview)
+                    binding!!.scrollView.scrollToView(binding!!.textReview)
                 }
             }
             scrollUser = true
@@ -125,14 +145,14 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
        // scroll 이동 시 tab 전환 구현
         if(scrollUser) {
             tabUser = false
-            if (calculateRectOnScreen(binding.scrollView).top >= calculateRectOnScreen(binding.textRest).top) {
-                binding.tablayout.selectTab(tab1)
+            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textRest).top) {
+                binding!!.tablayout.selectTab(tab1)
             }
-            if (calculateRectOnScreen(binding.scrollView).top >= calculateRectOnScreen(binding.textMenu).top) {
-                binding.tablayout.selectTab(tab2)
+            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textMenu).top) {
+                binding!!.tablayout.selectTab(tab2)
             }
-            if(calculateRectOnScreen(binding.scrollView).top >= calculateRectOnScreen(binding.textReview).top){
-                binding.tablayout.selectTab(tab3)
+            if(calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textReview).top){
+                binding!!.tablayout.selectTab(tab3)
             }
 
             tabUser = true
@@ -156,5 +176,20 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     fun ScrollView.scrollToView(view: View) {
         val y = computeDistanceToView(view)
         this.scrollTo(0, y)
+    }
+    override fun onStart() {
+        super.onStart()
+//        menuadapter.startListening()
+//        reviewadapter.startListening()
+    }
+    override fun onStop() {
+        super.onStop()
+//        menuadapter.stopListening()
+//        reviewadapter.stopListening()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 }

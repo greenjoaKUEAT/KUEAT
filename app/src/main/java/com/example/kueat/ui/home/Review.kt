@@ -1,7 +1,7 @@
 package com.example.kueat.ui.home
 
-data class Review(var article_id : Int, var comment_number:Int ,var content :String,var date:String ,
-                  var liked_user_number:Int,var restaurant_id:Int,var title:String,var type:Int,var uid:String) {
-    constructor():this(0,0,"no info","no info",0,
-    0,"no info",0,"no info")
+data class Review(var article_id : String, var comment_number:String ,var content :String,var date:String ,
+                  var liked_user_number:String,var restaurant_id:String,var title:String,var type:String,var uid:String) {
+    constructor():this("no info","no info","no info","no info","no info",
+        "no info","no info","no info","no info")
 }

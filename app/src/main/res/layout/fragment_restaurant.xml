@@ -68,6 +68,7 @@
                     android:textColor="@color/black"
                     />
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/menurecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"  />
             </LinearLayout>
@@ -87,6 +88,7 @@
                     android:textColor="@color/black"
                     />
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/reviewrecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="508dp"
                     />
