@@ -55,7 +55,6 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
 
 
         init()
-        initUser()
     }
 
     private fun initUser() {
