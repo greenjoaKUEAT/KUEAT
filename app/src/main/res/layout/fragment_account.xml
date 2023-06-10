@@ -50,7 +50,7 @@
                         android:id="@+id/infoName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="홍길동 / 닉네임"
+                        android:text=""
                         android:textColor="@color/black"
                         android:textSize="17dp"
                         android:maxLines="1"
@@ -63,13 +63,13 @@
                         android:layout_height="wrap_content"
                         android:maxLines="1"
                         android:ellipsize="end"
-                        android:text="kjy0703@konkuk.ac.kr" />
+                        android:text="" />
 
                     <TextView
                         android:id="@+id/infoId"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="19학번" />
+                        android:text="학번" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -271,6 +271,7 @@
                     android:textColor="@color/black"
                     android:text="스크롤 테스트(삭제예정)" />
                 <TextView
+                    android:id="@+id/testRest"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left"
