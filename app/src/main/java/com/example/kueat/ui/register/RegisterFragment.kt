@@ -2,52 +2,37 @@ package com.example.kueat.ui.register
 
 import android.app.Activity
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.os.SystemClock
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import com.example.kueat.MainActivity
+import androidx.fragment.app.Fragment
 import com.example.kueat.R
 import com.example.kueat.StartActivity
 import com.example.kueat.databinding.FragmentRegisterBinding
 import com.example.kueat.`object`.User
 import com.example.kueat.ui.filter.FilterLocFragment
-import com.example.kueat.ui.filter.FilterMenuFragment
-import com.example.kueat.ui.login.LoginFragment
-import com.google.android.play.integrity.internal.f
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.auth.ktx.userProfileChangeRequest
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
-import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
-import java.util.regex.Pattern
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
-
+import kotlinx.coroutines.tasks.await
 
 class RegisterFragment : Fragment() {
     lateinit var binding: FragmentRegisterBinding
     private lateinit var auth: FirebaseAuth
     lateinit var inputManager: InputMethodManager
     lateinit var kueatDB_user: DatabaseReference
-    private val scope = CoroutineScope(Dispatchers.Default)
+    private val mainscope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,7 +68,9 @@ class RegisterFragment : Fragment() {
                 var view = activity?.currentFocus
                 if (view == null) {view = View(activity)}
                 inputManager.hideSoftInputFromWindow(view.windowToken, 0);
-                createAccount(email, password,id,name,nickname)
+                mainscope.launch {
+                    createAccount(email, password,id,name,nickname)
+                }
             }
         }
         binding.backBtn.setOnClickListener {
@@ -91,11 +78,11 @@ class RegisterFragment : Fragment() {
         }
     }
 
-    private fun createAccount(email: String, password: String,id:String,name:String,nickname:String) {
+    private suspend fun createAccount(email: String, password: String, id:String, name:String, nickname:String) {
         showProgressBar()
         Log.d("registerFragment", "createAccount:$email")
 
-        if (!validateForm()) {
+        if (!(validateForm().await())) {
             hideProgressBar()
             return
         }
@@ -172,7 +159,7 @@ class RegisterFragment : Fragment() {
     }
 
 
-    private fun validateForm(): Boolean {
+    private fun validateForm(): Deferred<Boolean> {
         var valid = true
         val emailPattern = Regex("""^[a-zA-Z0-9]+@konkuk.ac.kr$""")
         val pwPattern = Regex("""^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}${'$'}""")
@@ -209,78 +196,69 @@ class RegisterFragment : Fragment() {
         if (TextUtils.isEmpty(nickname)||!nicknamePattern.matches(nickname)) {
             binding.nicknameInputText.hint = "1~15자 사이로 입력해주세요."
             valid = false
+        }else{
+            binding.nicknameInputText.hint = ""
         }
 
         val id = binding.idInputText.text.toString()
         if (TextUtils.isEmpty(id)||!idPattern.matches(id)) {
             binding.idInputText.hint = "9자리 숫자로 입력해주세요."
             valid = false
-        }
-        else{
-            scope.launch{
-                var isCheck = true
-                async(Dispatchers.IO) {
-//                    isCheck = checkRedundantId(id)
-                    kueatDB_user.addListenerForSingleValueEvent(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            for (data in snapshot.children) {
-                                Log.e(
-                                    "registerFragment",
-                                    "ValueEventListener-onDataChange : ${data.value}",
-                                )
-                                val datas = data.value as Map<String, String>
-                                if (datas["id"].equals(id)) {
-                                    Log.e(
-                                        "registerFragment",
-                                        "ValueEventListener-onDataChange : ${datas["id"]}&$id",
-                                    )
-                                    isCheck = false
-                                    break
-                                }
-                            }
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                        }
-                    })
-                }.await()
-                if(!isCheck){
-                    Log.e("registerFragment", "학번존재",)
-                    binding.idInputText.hint = "이미 존재하는 학번입니다."
-                    valid = false
-                }
-            }
+        }else{
+            binding.idInputText.hint = ""
         }
 
-        if(!valid)
-            clearText()
-
-        return valid
-    }
-
-    private fun checkRedundantId(id: String){
-//        Handler(Looper.getMainLooper()).postDelayed({
-            kueatDB_user.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    for (data in snapshot.children) {
-                        Log.e(
-                            "registerFragment",
-                            "ValueEventListener-onDataChange : ${data.value}",
-                        )
-                        val datas = data.value as Map<String, String>
-                        if (datas["id"].equals(id)) {
+        return mainscope.async {
+            Log.e("registerFragment", "딜레이전",)
+            withContext(Dispatchers.IO) {
+                kueatDB_user.get().addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        for (data in it.result.children) {
                             Log.e(
                                 "registerFragment",
-                                "ValueEventListener-onDataChange : ${datas["id"]}&$id",
+                                "ValueEventListener-onDataChange : ${data.value}",
                             )
+                            val datas = data.value as Map<String, String>
+                            if (datas["nickname"].equals(nickname)) {
+                                Log.e(
+                                    "registerFragment",
+                                    "ValueEventListener-onDataChange : ${datas["nickname"]}&$nickname",
+                                )
+                                Log.e("registerFragment", "닉네임존재")
+                                binding.nicknameInputText.hint = "이미 존재하는 닉네임입니다."
+                                valid = false
+                                break
+                            }
                         }
                     }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
-//        },500)
+                }.await()
+                kueatDB_user.get().addOnCompleteListener {
+                    if(it.isSuccessful){
+                        for (data in it.result.children) {
+                            Log.e(
+                                "registerFragment",
+                                "ValueEventListener-onDataChange : ${data.value}",
+                            )
+                            val datas = data.value as Map<String, String>
+                            if (datas["id"].equals(id)) {
+                                Log.e(
+                                    "registerFragment",
+                                    "ValueEventListener-onDataChange : ${datas["id"]}&$id",
+                                )
+                                Log.e("registerFragment", "학번존재",)
+                                binding.idInputText.hint = "이미 존재하는 학번입니다."
+                                valid = false
+                                break
+                            }
+                        }
+                    }
+                }.await()
+            }
+            Log.e("registerFragment", "딜레이후 : $valid",)
+            if(!valid)
+                clearText()
+            return@async valid
+        }
     }
 
     fun changeStartActivity(){

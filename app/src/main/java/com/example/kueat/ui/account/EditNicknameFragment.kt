@@ -27,6 +27,8 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.database.ktx.getValue
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 
 
 class EditNicknameFragment : Fragment() {
@@ -37,6 +39,7 @@ class EditNicknameFragment : Fragment() {
     lateinit var inputManager: InputMethodManager
     lateinit var kueatDB: DatabaseReference
     val userModel: MyUserModel by activityViewModels()
+    private val mainscope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,6 +55,7 @@ class EditNicknameFragment : Fragment() {
         initBtn()
         inputManager = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         auth = Firebase.auth
+        kueatDB = Firebase.database.getReference("KueatDB/User")
     }
 
     private fun showProgressBar() {
@@ -73,37 +77,42 @@ class EditNicknameFragment : Fragment() {
 
                 user = Firebase.auth.currentUser!!
                 val newNickname = nicknameInputText.text.toString()
+                val nicknamePattern = Regex("""^.{1,15}${'$'}""")
 
-                if(TextUtils.isEmpty(newNickname)){
+                if (TextUtils.isEmpty(newNickname)||!nicknamePattern.matches(newNickname)) {
                     hideProgressBar()
-                    Toast.makeText(activity,"유효한 닉네임이 아닙니다.",Toast.LENGTH_SHORT).show()
+                    binding.nicknameInputText.hint = "1~15자 사이로 입력해주세요."
                 }else {
-                    kueatDB = Firebase.database.getReference("KueatDB/User")
-                    val currentUser = kueatDB.child(user!!.uid)
-                        .child("nickname")
-                        .setValue(newNickname)
-                        .addOnCompleteListener { task ->
-                            hideProgressBar()
-                            if (task.isSuccessful) {
-                                initUser(newNickname)
-                                Log.d(TAG, "User nickname updated.")
-                                Toast.makeText(context, "닉네임이 변경되었습니다.", Toast.LENGTH_SHORT).show()
-                                changeAccountFragment()
-                            } else {
-                                if (task.exception is FirebaseTooManyRequestsException) {
-                                    Toast.makeText(context, "잠시후 재시도해주세요.", Toast.LENGTH_SHORT)
-                                        .show()
-                                } else if (task.exception is FirebaseAuthRecentLoginRequiredException) {
-                                    Toast.makeText(context, "다시 로그인 후 이용해주세요.", Toast.LENGTH_SHORT)
-                                        .show()
-                                    auth.signOut()
-                                    changeStartActivity()
-                                } else {
-                                    Toast.makeText(context, "닉네임 변경을 실패했습니다.", Toast.LENGTH_SHORT)
-                                        .show()
+                    var valid = true
+                    mainscope.launch {
+                        withContext(Dispatchers.IO){
+                            kueatDB.get().addOnCompleteListener {
+                                if (it.isSuccessful) {
+                                    for (data in it.result.children) {
+                                        Log.e(
+                                            TAG,
+                                            "ValueEventListener-onDataChange : ${data.value}",
+                                        )
+                                        val datas = data.value as Map<String, String>
+                                        if (datas["nickname"].equals(newNickname)) {
+                                            Log.e(
+                                                TAG,
+                                                "ValueEventListener-onDataChange : ${datas["nickname"]}&$newNickname",
+                                            )
+                                            Log.e(TAG, "닉네임존재")
+                                            binding.nicknameInputText.text.clear()
+                                            binding.nicknameInputText.hint = "이미 존재하는 닉네임입니다."
+                                            valid = false
+                                            break
+                                        }
+                                    }
                                 }
-                            }
+                            }.await()
                         }
+                        if(valid)
+                            changeNickname(newNickname)
+                        hideProgressBar()
+                    }
                 }
 
             }
@@ -112,6 +121,34 @@ class EditNicknameFragment : Fragment() {
             }
         }
     }
+
+    fun changeNickname(newNickname:String){
+        val currentUser = kueatDB.child(user!!.uid)
+            .child("nickname")
+            .setValue(newNickname)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    initUser(newNickname)
+                    Log.d(TAG, "User nickname updated.")
+                    Toast.makeText(context, "닉네임이 변경되었습니다.", Toast.LENGTH_SHORT).show()
+                    changeAccountFragment()
+                } else {
+                    if (task.exception is FirebaseTooManyRequestsException) {
+                        Toast.makeText(context, "잠시후 재시도해주세요.", Toast.LENGTH_SHORT)
+                            .show()
+                    } else if (task.exception is FirebaseAuthRecentLoginRequiredException) {
+                        Toast.makeText(context, "다시 로그인 후 이용해주세요.", Toast.LENGTH_SHORT)
+                            .show()
+                        auth.signOut()
+                        changeStartActivity()
+                    } else {
+                        Toast.makeText(context, "닉네임 변경을 실패했습니다.", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            }
+    }
+
     private fun initUser(nickname:String) {
         val name = user?.displayName
         val email = user?.email

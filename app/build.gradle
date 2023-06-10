@@ -8,9 +8,6 @@ properties.load(project.rootProject.file('local.properties').newDataInputStream(
 def naverMapAPIKEY = properties.getProperty('Naver_Map_API_KEY')
 
 android {
-    buildFeatures{
-        viewBinding true
-    }
     namespace 'com.example.kueat'
     compileSdk 33
 
