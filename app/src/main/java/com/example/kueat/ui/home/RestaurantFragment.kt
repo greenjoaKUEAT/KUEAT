@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
 import com.example.kueat.`object`.Menu
-import com.example.kueat.`object`.Review
+import com.example.kueat.`object`.Article
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.gms.tasks.Task
 import com.google.android.material.tabs.TabLayout
@@ -98,9 +98,9 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         /*리뷰*/
         ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         dbReview = Firebase.database.getReference("KueatDB/Article")
-        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toString())
-        val optionReview = FirebaseRecyclerOptions.Builder<Review>()
-            .setQuery(query, Review::class.java).build()
+        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble())
+        val optionReview = FirebaseRecyclerOptions.Builder<Article>()
+            .setQuery(query, Article::class.java).build()
         reviewadapter = MyReviewAdapter(optionReview)
         reviewadapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
@@ -205,13 +205,13 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     }
     override fun onStart() {
         super.onStart()
-//        menuadapter.startListening()
-//        reviewadapter.startListening()
+        menuadapter.startListening()
+        reviewadapter.startListening()
     }
     override fun onStop() {
         super.onStop()
-//        menuadapter.stopListening()
-//        reviewadapter.stopListening()
+        menuadapter.stopListening()
+        reviewadapter.stopListening()
     }
 
     override fun onDestroyView() {

@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.kueat.databinding.ActivityMainBinding
+import com.example.kueat.`object`.Article
 import com.example.kueat.`object`.User
 import com.example.kueat.ui.account.AccountFragment
 import com.example.kueat.ui.account.EditNicknameFragment
