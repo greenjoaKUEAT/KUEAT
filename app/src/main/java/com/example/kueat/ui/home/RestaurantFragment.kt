@@ -40,7 +40,6 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     var tabUser = true
     var scrollUser = true
     var isLiked = false
-    var likedid:String = ""
     lateinit var item :Task<DataSnapshot>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -105,7 +104,11 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         reviewadapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
                 // Review 창으로 이동, 이동하면서 review id 넘기고 댓글 받아와야함
-
+                val bundle  = Bundle()
+                bundle.putString("review_id",reviewadapter.getItem(pos).article_id.toString())
+                val reviewFragment = ReviewFragment()
+                reviewFragment.arguments = bundle
+                parentFragmentManager.beginTransaction().replace(R.id.main_frm,reviewFragment).commit()
             }
         }
         binding!!.menurecyclerView.layoutManager = MenulayoutManager
