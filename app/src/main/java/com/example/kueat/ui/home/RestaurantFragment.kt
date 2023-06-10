@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlin.math.abs
 
 class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScrollChangeListener{
@@ -40,7 +41,6 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     var tabUser = true
     var scrollUser = true
     var isLiked = false
-    var likedid:String = ""
     lateinit var item :Task<DataSnapshot>
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -68,8 +68,10 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         dbULike = Firebase.database.getReference("KueatDB/LikedRestaurant")
         val key = rest_id.toString() + user!!.uid
         dbULike.child(key).get().addOnSuccessListener {
-            binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
-            isLiked = true
+            if(it.exists()) {
+                binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
+                isLiked = true
+            }
         }
 
         binding!!.apply {
@@ -81,7 +83,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                     binding!!.likebtn.setImageResource(R.drawable.tap_like_cpy)
                     isLiked = false
                 }else {// 좋아요
-                    dbULike.child(key).push().setValue(Likedrest(rest_id.toString(),user!!.uid,key))
+                    dbULike.child(key).setValue(Likedrest(rest_id.toString(),user!!.uid,key))
                     binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
                     isLiked = true
                 }
@@ -105,7 +107,11 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         reviewadapter.itemClickListener = object :MyReviewAdapter.OnItemClickListener{
             override fun OnItemClick(pos: Int) {
                 // Review 창으로 이동, 이동하면서 review id 넘기고 댓글 받아와야함
-
+                val bundle  = Bundle()
+                bundle.putString("review_id",reviewadapter.getItem(pos).article_id.toString())
+                val reviewFragment = ReviewFragment()
+                reviewFragment.arguments = bundle
+                parentFragmentManager.beginTransaction().replace(R.id.main_frm,reviewFragment).commit()
             }
         }
         binding!!.menurecyclerView.layoutManager = MenulayoutManager
@@ -205,17 +211,19 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     }
     override fun onStart() {
         super.onStart()
-        menuadapter.startListening()
-        reviewadapter.startListening()
+//        menuadapter.startListening()
+//        reviewadapter.startListening()
     }
     override fun onStop() {
         super.onStop()
-        menuadapter.stopListening()
-        reviewadapter.stopListening()
+//        menuadapter.stopListening()
+//        reviewadapter.stopListening()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        menuadapter.stopListening()
+        reviewadapter.stopListening()
         binding = null
     }
 }

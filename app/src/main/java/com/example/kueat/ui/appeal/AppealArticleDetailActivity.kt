@@ -32,8 +32,8 @@ class AppealArticleDetailActivity : AppCompatActivity() {
     fun initData() {
         dataList = arrayListOf(
             Comment(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
@@ -42,17 +42,8 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             ),
 
             Comment(
-                0,
-                0,
-                0,
-                "인정 가격대가 좀 있긴 한대 맛있음",
-                1,
-                0,
-                "05/12 20:12"
-            ),
-            Comment(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
@@ -60,8 +51,17 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 "05/12 20:12"
             ),
             Comment(
+                "no info",
+                "no info",
                 0,
+                "인정 가격대가 좀 있긴 한대 맛있음",
+                1,
                 0,
+                "05/12 20:12"
+            ),
+            Comment(
+                "no info",
+                "no info",
                 0,
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,

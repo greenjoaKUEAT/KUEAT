@@ -20,6 +20,7 @@ import com.example.kueat.ui.account.EditPasswordFragment
 import com.example.kueat.ui.appeal.AppealFragment
 import com.example.kueat.ui.home.HomeFragment
 import com.example.kueat.ui.home.RestaurantFragment
+import com.example.kueat.ui.home.ReviewFragment
 import com.example.kueat.ui.like.LikeFragment
 import com.example.kueat.viewmodel.MyUserModel
 import com.google.android.material.navigation.NavigationBarView
@@ -87,7 +88,10 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                     startActivity(initIntent)
                 }else if(fragment is EditPasswordFragment||fragment is EditNicknameFragment){
                     supportFragmentManager.beginTransaction().replace(R.id.main_frm, AccountFragment()).commit()
-                }else{
+                }else if(fragment is ReviewFragment){
+                    supportFragmentManager.beginTransaction().replace(R.id.main_frm, RestaurantFragment()).commit()
+                }
+                else{
                     binding.navView.selectedItemId = R.id.navigation_home
                 }
             }
