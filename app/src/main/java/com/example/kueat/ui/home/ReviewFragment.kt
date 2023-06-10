@@ -5,9 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.viewModels
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.`object`.Comment
+import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -24,6 +28,7 @@ class ReviewFragment : Fragment() {
     lateinit var layoutManager: LinearLayoutManager
     var review_id = 0
     val user = Firebase.auth.currentUser
+    val userModel: MyUserModel by activityViewModels()
     var num = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -59,15 +64,14 @@ class ReviewFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
             commentAdapter.stopListening()
-            val key = review_id.toString()+"-"+binding!!.tvAppealArticleComment.text.toString()
-            val currentTime = Calendar.getInstance().time;
+            val currentTime = Calendar.getInstance().time
             val dataFormat = SimpleDateFormat("MM/dd HH:MM")
             val current = dataFormat.format(currentTime)
-            val item = Comment(0,0,review_id,binding!!.commentEdit.text.toString(),
+            val key = dbComment.push().key
+            val item = Comment(key!!,userModel.selectedUser.value!!.nickname,review_id,binding!!.commentEdit.text.toString(),
             0,0,current)
-            dbComment.child(key).setValue(item)
-//            dbComment.child(key).child("comment_id").setValue(key)
-//            dbComment.child(key).child("user_id").setValue(user!!.uid)
+            dbComment.child(key!!).setValue(item)
+
             dbReview.child(review_id.toString()).get().addOnSuccessListener {
                 val map = it.getValue() as HashMap<String,Any>
                 num = map.get("comment_number").toString().toInt()
@@ -83,9 +87,11 @@ class ReviewFragment : Fragment() {
         binding!!.commentrecyclerView.layoutManager = layoutManager
         binding!!.commentrecyclerView.adapter = commentAdapter
         commentAdapter.startListening()
-
-
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
 
 }

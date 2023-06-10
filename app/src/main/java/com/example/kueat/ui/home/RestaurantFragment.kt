@@ -68,8 +68,10 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         dbULike = Firebase.database.getReference("KueatDB/LikedRestaurant")
         val key = rest_id.toString() + user!!.uid
         dbULike.child(key).get().addOnSuccessListener {
-            binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
-            isLiked = true
+            if(it.exists()) {
+                binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
+                isLiked = true
+            }
         }
 
         binding!!.apply {
@@ -81,7 +83,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                     binding!!.likebtn.setImageResource(R.drawable.tap_like_cpy)
                     isLiked = false
                 }else {// 좋아요
-                    dbULike.child(key).push().setValue(Likedrest(rest_id.toString(),user!!.uid,key))
+                    dbULike.child(key).setValue(Likedrest(rest_id.toString(),user!!.uid,key))
                     binding!!.likebtn.setImageResource(R.drawable.tap_like_filled)
                     isLiked = true
                 }
@@ -209,17 +211,19 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     }
     override fun onStart() {
         super.onStart()
-        menuadapter.startListening()
-        reviewadapter.startListening()
+//        menuadapter.startListening()
+//        reviewadapter.startListening()
     }
     override fun onStop() {
         super.onStop()
-        menuadapter.stopListening()
-        reviewadapter.stopListening()
+//        menuadapter.stopListening()
+//        reviewadapter.stopListening()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
+        menuadapter.stopListening()
+        reviewadapter.stopListening()
         binding = null
     }
 }
