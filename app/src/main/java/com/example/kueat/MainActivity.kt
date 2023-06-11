@@ -51,11 +51,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
             backPressed()
         }
 
-        Loc= getIntent().getStringExtra("Loc").toString()
-        Menu= getIntent().getStringExtra("Menu").toString()
-
+        Loc= intent.getStringExtra("Loc").toString()
+        Menu= intent.getStringExtra("Menu").toString()
 
         init()
+        initUser()
     }
 
     private fun initUser() {
@@ -82,10 +82,15 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-
         when(item.itemId){
-            R.id.navigation_like -> supportFragmentManager.beginTransaction().replace(R.id.main_frm, LikeFragment()).commit()
+            R.id.navigation_like -> {
+                val bundle = Bundle()
+                bundle.putString("Loc", Loc)
+                bundle.putString("Menu", Menu)
+                val likeFragment = LikeFragment()
+                likeFragment.arguments = bundle
+                supportFragmentManager.beginTransaction().replace(R.id.main_frm, likeFragment).commit()
+            }
             R.id.navigation_home -> {
                     val bundle = Bundle()
                     bundle.putString("Loc", Loc)
@@ -118,5 +123,8 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
                 }
             }
         }
+    }
+    fun changeBottomIconHome(){
+        binding.navView.selectedItemId = R.id.navigation_home
     }
 }

@@ -29,4 +29,20 @@
     <dimen name="filter_button_margin_top">30dp</dimen>
     <dimen name="filter_subtitle_margin_top">56dp</dimen>
     <dimen name="filter_middle_margin">50dp</dimen>
+
+<!--    fragment_like-->
+    <dimen name="like_linearlayout_padding">30dp</dimen>
+    <dimen name="like_title_textsize">26sp</dimen>
+    <dimen name="like_title_margin_bottom">20dp</dimen>
+    <dimen name="like_row_img_size">80dp</dimen>
+    <dimen name="like_row_padding_vertical">15dp</dimen>
+    <dimen name="like_row_padding_horizontal">20dp</dimen>
+    <dimen name="like_content_padding_horizontal">20dp</dimen>
+    <dimen name="like_content_margin_vertical">20dp</dimen>
+    <dimen name="like_textsize">15sp</dimen>
+
+
+<!--    fragment_home-->
+    <dimen name="home_textsize">18sp</dimen>
+    <dimen name="home_tag_textsize">40sp</dimen>
 </resources>
