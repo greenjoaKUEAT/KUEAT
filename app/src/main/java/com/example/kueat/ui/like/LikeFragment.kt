@@ -81,7 +81,7 @@ class LikeFragment : Fragment() {
             override fun onItemClick(holder: MyLikeAdapter.ViewHolder, position: Int) {
                 binding.apply {
                     val bundle = Bundle()
-                    bundle.putLong("restaurant",likeAdapter.items[holder.bindingAdapterPosition].restaurant_id)
+                    bundle.putLong("restaurant",likeAdapter.items[position].restaurant_id)
                     val restaurantFragment = RestaurantFragment()
                     restaurantFragment.arguments = bundle
                     (activity as MainActivity).changeBottomIconHome()
