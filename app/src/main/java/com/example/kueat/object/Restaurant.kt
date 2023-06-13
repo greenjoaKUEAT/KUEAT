@@ -1,7 +1,10 @@
 package com.example.kueat.`object`
 
-data class Restaurant(var article_number: Int, var location:String, var name : String,
-                      var rating :Double, var restaurant_id:Int,var tag_location:String,var tag_type:String)
-{
-    constructor():this(0,"no info","no info",0.1,0,"no info","no info")
+data class Restaurant(val article_number:Long,val location:location, val name:String,
+                      val photo:String, val rating:String, val restaurant_id:Long,
+                      val tag_location:String, val tag_type:String ){
+    constructor():this(0 , location("37.0","137.5"), "알촌", "", "5.0",
+        0,"후문","한식"
+    )
 }
+

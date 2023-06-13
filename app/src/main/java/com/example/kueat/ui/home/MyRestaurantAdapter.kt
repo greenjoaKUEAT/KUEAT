@@ -8,29 +8,37 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.widget.EdgeEffectCompat.getDistance
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.kueat.databinding.FragmentHomeRowBinding
+import com.example.kueat.databinding.LikerowBinding
+import com.example.kueat.`object`.Restaurant
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.net.URL
+import kotlinx.coroutines.withContext
 
 class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
     FirebaseRecyclerAdapter<Restaurant, MyRestaurantAdapter.ViewHolder>(options) {
 
     private var locationManager: LocationManager? = null
     private var currentLocation: Location? = null
+    private val mainscope = CoroutineScope(Dispatchers.Main)
+    lateinit var dbMenu: DatabaseReference
+    private val TAG="likeFragment"
 
 
 
@@ -40,7 +48,7 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
 
     var itemClickListener: OnItemClickListener? = null
 
-    inner class ViewHolder(val binding: FragmentHomeRowBinding) :
+    inner class ViewHolder(val binding: LikerowBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
             Log.d("HI","HI")
@@ -56,7 +64,7 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
-            FragmentHomeRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            LikerowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         Log.d("HI","HI")
 
         return ViewHolder(view)
@@ -67,7 +75,7 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
 
         holder.binding.apply {
 
-            val restaurantLocation = LatLng(model.location.Latitude, model.location.Longitude) // 식당 위치 정보
+            val restaurantLocation = LatLng(model.location.Latitude.toDouble(), model.location.Longitude.toDouble()) // 식당 위치 정보
             if (currentLocation != null) {
                 val distance = getDistance(currentLocation!!, restaurantLocation)
                 restaurantDistance.text = "내 위치로부터 ${distance}m"
@@ -82,24 +90,59 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>) :
 
 
 
-            restaurantName.text = model.name
-            restaurantLocationTag.text = "#" + model.tag_location
-            restaurantMenuTag.text = "#" + model.tag_type
-            restaurantRepMenu.text = "대표 메뉴 : " + getRepMenu(model.restaurant_id)
-
-
+            textRestaurantName.text = model.name
+            textTag.text = "#${model.tag_location} #${model.tag_type}"
+            textRate.text = model.rating
+            mainscope.launch {
+                textSignature.text = "${getRepMenu(model.restaurant_id).await()}"
+                textEnd.visibility = View.VISIBLE
+            }
         }
     }
 
-    private fun getRepMenu(restaurant_id: Int): String? {
+    fun getRepMenu(restaurant_id: Long): Deferred<String> {
         val restaurantId = restaurant_id
+        dbMenu = Firebase.database.getReference("KueatDB/Menu")
+        var signatureArr:ArrayList<String> = arrayListOf()
+        var signatureStr = ""
 
-        val menuRef = FirebaseDatabase.getInstance().getReference("KueatDB/Menu")
-        val query = menuRef.orderByChild("signature").equalTo("1")
+        return mainscope.async{
+            withContext(Dispatchers.IO){
+                dbMenu.get().addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        for (data in it.result.children) {
+                            Log.e(
+                                TAG,
+                                "ValueEventListener-onDataChange : ${data.value}",
+                            )
+                            val datas = data.value as Map<String, String>
+                            var resId = datas["restaurant_id"]!!.toLong()
+                            Log.e(
+                                TAG,
+                                "menu : ${datas["restaurant_id"]}&$restaurantId / ${datas["signature"]}",
+                            )
 
+                            if ((resId==restaurantId)&& datas["signature"]!!.equals("1")) {
+                                Log.e(
+                                    TAG,
+                                    "ValueEventListener-onDataChange : ${datas["restaurant_id"]}&$restaurantId",
+                                )
+                                datas["name"]?.let { it1 -> signatureArr.add(it1) }
+                            }
+                        }
+                    }
+                }.await()
+            }
 
-        return "아직 모르겠다"
-
+            for (i in signatureArr) {
+                signatureStr += i
+                if (i != signatureArr[signatureArr.size - 1])
+                    signatureStr += ", "
+            }
+            if(signatureArr.size==0)
+                signatureStr = "다"
+            return@async signatureStr
+        }
     }
 
     private fun getDistance(
