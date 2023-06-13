@@ -39,19 +39,20 @@ class WriteReviewFragment : Fragment() {
         dbReview = Firebase.database.getReference("KueatDB/Article")
         binding!!.apply {
             tvConfirmEditArticle.setOnClickListener {
-
-            }
-            ivEditAppealArticleBack.setOnClickListener {
                 val currentTime = Calendar.getInstance().time
                 val dataFormat = SimpleDateFormat("MM/dd HH:MM")
                 val current = dataFormat.format(currentTime)
                 val key = dbReview.push().key
-                val item = Article(0,0,rest_id,0,title.text.toString(),context.text.toString()
+                val item = Article(key!!,user!!.uid,rest_id,0,title.text.toString(),context.text.toString()
                     ,0,0,current)
-                dbReview.child(key!!).setValue(item)
-                dbReview.child(key!!).child("article_id").setValue(key)
-                dbReview.child(key!!).child("user_id").setValue(user!!.uid)
-                this@WriteReviewFragment.onDestroy()
+                dbReview.child(key!!).setValue(item).addOnSuccessListener {
+                    activity?.onBackPressed()
+                }
+
+
+            }
+            ivEditAppealArticleBack.setOnClickListener {
+                activity?.onBackPressed()
             }
         }
     }

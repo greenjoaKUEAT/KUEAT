@@ -7,6 +7,7 @@
     tools:context=".ui.home.RestaurantFragment"
     android:orientation="vertical"
     android:layout_marginBottom="10dp"
+    android:layout_margin="10dp"
     >
     <!--  image view ?  tab -->
     <com.google.android.material.tabs.TabLayout
@@ -25,7 +26,7 @@
         >
 
     </com.google.android.material.tabs.TabLayout>
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:id="@+id/scrollView"
         android:fillViewport="true"
         android:scrollbars="none"
@@ -72,7 +73,8 @@
                 android:id="@+id/map_frame"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/style_item_res" />
+                android:background="@drawable/style_item_res" >
+            </FrameLayout>>
 
             <LinearLayout
                 android:background="@drawable/style_item_res"
@@ -90,6 +92,7 @@
                     android:textColor="@color/black"
                     />
                 <androidx.recyclerview.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
                     android:id="@+id/menurecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="300dp"  />
@@ -127,6 +130,7 @@
                     </LinearLayout>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
+                    android:nestedScrollingEnabled="false"
                     android:id="@+id/reviewrecyclerView"
                     android:layout_width="match_parent"
                     android:layout_height="508dp"
@@ -136,6 +140,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
 </LinearLayout>
