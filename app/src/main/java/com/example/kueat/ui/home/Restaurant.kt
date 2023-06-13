@@ -1,6 +1,5 @@
 package com.example.kueat.ui.home
 
-import com.google.android.gms.maps.model.LatLng
 
 data class Restaurant(val article_number:Int,val location:location, val name:String,
                       val photo:String, val rating:Float, val restaurant_id:Int,

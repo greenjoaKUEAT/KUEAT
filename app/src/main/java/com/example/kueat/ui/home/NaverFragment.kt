@@ -18,8 +18,7 @@ import com.naver.maps.map.overlay.Marker
 
 
 class NaverFragment : Fragment() , OnMapReadyCallback{
-
-    lateinit var binding: FragmentNaverBinding
+    var binding: FragmentNaverBinding ?= null
     lateinit var rdb : DatabaseReference
     var rest_id = 0
     var loc = ""
@@ -29,12 +28,12 @@ class NaverFragment : Fragment() , OnMapReadyCallback{
     ): View? {
         binding = FragmentNaverBinding.inflate(inflater, container, false)
         rest_id = arguments?.getString("rest_id")!!.toInt()
-        return binding.root
+        return binding!!.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.navermap.onStart()
+        binding!!.navermap.onStart()
         rdb = Firebase.database.getReference("KueatDB/Restaurant")
         rdb.get().addOnSuccessListener {
             val map = it.child(rest_id.toString()).getValue() as HashMap<String,Any>
@@ -60,6 +59,11 @@ class NaverFragment : Fragment() , OnMapReadyCallback{
             45.0 // 방향
         )
         naverMap.setCameraPosition(cameraPosition)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        binding = null
     }
 
 

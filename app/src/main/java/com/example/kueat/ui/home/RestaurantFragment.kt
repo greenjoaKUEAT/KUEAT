@@ -98,9 +98,20 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         menuadapter = MyMenuAdapter(optionMenu)
 
         /*리뷰*/
+        binding!!.apply {
+            addReview.setOnClickListener {
+                val bundle  = Bundle()
+                bundle.putString("rest_id",rest_id.toString())
+                val reviewWriteFragment = WriteReviewFragment()
+                reviewWriteFragment.arguments = bundle
+                parentFragmentManager.beginTransaction().replace(R.id.main_frm,reviewWriteFragment).commit()
+            }
+        }
+
+
         ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         dbReview = Firebase.database.getReference("KueatDB/Article")
-        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble())
+        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble()).ref.orderByChild("type").equalTo("0".toDouble())
         val optionReview = FirebaseRecyclerOptions.Builder<Article>()
             .setQuery(query, Article::class.java).build()
         reviewadapter = MyReviewAdapter(optionReview)
@@ -120,8 +131,8 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         binding!!.reviewrecyclerView.layoutManager = ReviewlayoutManager
         binding!!.reviewrecyclerView.adapter = reviewadapter
 
-        menuadapter.startListening()
-        reviewadapter.startListening()
+//        menuadapter.startListening()
+//        reviewadapter.startListening()
 
     }
 
@@ -211,19 +222,17 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     }
     override fun onStart() {
         super.onStart()
-//        menuadapter.startListening()
-//        reviewadapter.startListening()
+        menuadapter.startListening()
+        reviewadapter.startListening()
     }
     override fun onStop() {
         super.onStop()
-//        menuadapter.stopListening()
-//        reviewadapter.stopListening()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
         menuadapter.stopListening()
         reviewadapter.stopListening()
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 }

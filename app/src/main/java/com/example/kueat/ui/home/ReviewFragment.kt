@@ -68,7 +68,7 @@ class ReviewFragment : Fragment() {
             val dataFormat = SimpleDateFormat("MM/dd HH:MM")
             val current = dataFormat.format(currentTime)
             val key = dbComment.push().key
-            val item = Comment(key!!,userModel.selectedUser.value!!.nickname,review_id,binding!!.commentEdit.text.toString(),
+            val item = Comment(key!!,user!!.uid,review_id,binding!!.commentEdit.text.toString(),
             0,0,current)
             dbComment.child(key!!).setValue(item)
 
@@ -81,16 +81,22 @@ class ReviewFragment : Fragment() {
                 commentAdapter.startListening()
             }
             binding!!.commentEdit.text.clear()
-
         }
 
         binding!!.commentrecyclerView.layoutManager = layoutManager
         binding!!.commentrecyclerView.adapter = commentAdapter
+    }
+    override fun onStart() {
+        super.onStart()
         commentAdapter.startListening()
     }
+    override fun onStop() {
+        super.onStop()
+        commentAdapter.stopListening()
+    }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onDestroyView() {
+        super.onDestroyView()
         binding = null
     }
 
