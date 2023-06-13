@@ -44,7 +44,7 @@ class ReviewFragment : Fragment() {
     }
 
     private fun initLayout() {
-        dbReview = Firebase.database.getReference("KueatDB/Article")
+        dbReview = Firebase.database.getReference("KueatDB/Article/0")
         dbReview.get().addOnSuccessListener {
             val map = it.child(review_id).getValue() as HashMap<String,Any>
             binding!!.apply {
@@ -94,8 +94,8 @@ class ReviewFragment : Fragment() {
         commentAdapter.stopListening()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         binding = null
     }
 

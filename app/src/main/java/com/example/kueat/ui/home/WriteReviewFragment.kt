@@ -21,6 +21,7 @@ class WriteReviewFragment : Fragment() {
     lateinit var dbReview : DatabaseReference
     var rest_id = 0
     val user = Firebase.auth.currentUser
+    var write = 1
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,19 +37,22 @@ class WriteReviewFragment : Fragment() {
     }
 
     fun initLayout(){
-        dbReview = Firebase.database.getReference("KueatDB/Article")
+        dbReview = Firebase.database.getReference("KueatDB/Article/0")
         binding!!.apply {
             tvConfirmEditArticle.setOnClickListener {
-                val currentTime = Calendar.getInstance().time
-                val dataFormat = SimpleDateFormat("MM/dd HH:MM")
-                val current = dataFormat.format(currentTime)
-                val key = dbReview.push().key
-                val item = Article(key!!,user!!.uid,rest_id,0,title.text.toString(),context.text.toString()
-                    ,0,0,current)
-                dbReview.child(key!!).setValue(item).addOnSuccessListener {
-                    activity?.onBackPressed()
+                if(write == 1) {
+                    write = 0
+                    val currentTime = Calendar.getInstance().time
+                    val dataFormat = SimpleDateFormat("MM/dd HH:MM")
+                    val current = dataFormat.format(currentTime)
+                    val key = dbReview.push().key
+                    val item = Article(key!!, user!!.uid, rest_id, 0, title.text.toString()
+                        , context.text.toString(), 0, 0, current)
+                    dbReview.child(key!!).setValue(item).addOnSuccessListener {
+                        write = 1
+                        activity?.onBackPressed()
+                    }
                 }
-
 
             }
             ivEditAppealArticleBack.setOnClickListener {
@@ -57,8 +61,8 @@ class WriteReviewFragment : Fragment() {
         }
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         binding = null
     }
 }

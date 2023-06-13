@@ -67,8 +67,8 @@ class NaverFragment : Fragment() , OnMapReadyCallback{
 
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         binding = null
     }
 

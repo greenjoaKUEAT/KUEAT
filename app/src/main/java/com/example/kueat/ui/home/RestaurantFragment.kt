@@ -121,8 +121,8 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
 
 
         ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
-        dbReview = Firebase.database.getReference("KueatDB/Article")
-        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble()).ref.orderByChild("type").equalTo("0".toDouble())
+        dbReview = Firebase.database.getReference("KueatDB/Article/0")
+        query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble())
 
         val optionReview = FirebaseRecyclerOptions.Builder<Article>()
             .setQuery(query, Article::class.java).build()
@@ -243,8 +243,8 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         reviewadapter.stopListening()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
         binding = null
     }
 }
