@@ -26,16 +26,15 @@ class ReviewFragment : Fragment() {
     lateinit var dbComment : DatabaseReference
     lateinit var commentAdapter: MyCommentAdapter
     lateinit var layoutManager: LinearLayoutManager
-    var review_id = 0
+    var review_id = ""
     val user = Firebase.auth.currentUser
-    val userModel: MyUserModel by activityViewModels()
     var num = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        review_id = arguments?.getString("review_id")!!.toInt()
+        review_id = arguments?.getString("review_id").toString()
         binding = FragmentReviewBinding.inflate(inflater,container,false)
         return binding!!.root
     }
@@ -45,9 +44,9 @@ class ReviewFragment : Fragment() {
     }
 
     private fun initLayout() {
-        dbReview = Firebase.database.getReference("KueatDB/Article")
+        dbReview = Firebase.database.getReference("KueatDB/Article/0")
         dbReview.get().addOnSuccessListener {
-            val map = it.child(review_id.toString()).getValue() as HashMap<String,Any>
+            val map = it.child(review_id).getValue() as HashMap<String,Any>
             binding!!.apply {
                 tvAppealArticleTitle.text = map.get("title").toString()
                 tvAppealArticleDescription.text = map.get("content").toString()
@@ -56,7 +55,7 @@ class ReviewFragment : Fragment() {
             }
         }
         dbComment = Firebase.database.getReference("KueatDB/Comment")
-        var query = dbComment.orderByChild("article_id").equalTo(review_id.toDouble())
+        var query = dbComment.orderByChild("article_id").equalTo(review_id)
         val option = FirebaseRecyclerOptions.Builder<Comment>()
             .setQuery(query, Comment::class.java).build()
         commentAdapter = MyCommentAdapter(option)
@@ -68,7 +67,7 @@ class ReviewFragment : Fragment() {
             val dataFormat = SimpleDateFormat("MM/dd HH:MM")
             val current = dataFormat.format(currentTime)
             val key = dbComment.push().key
-            val item = Comment(key!!,userModel.selectedUser.value!!.nickname,review_id,binding!!.commentEdit.text.toString(),
+            val item = Comment(key!!,user!!.uid,review_id,binding!!.commentEdit.text.toString(),
             0,0,current)
             dbComment.child(key!!).setValue(item)
 
@@ -81,12 +80,18 @@ class ReviewFragment : Fragment() {
                 commentAdapter.startListening()
             }
             binding!!.commentEdit.text.clear()
-
         }
 
         binding!!.commentrecyclerView.layoutManager = layoutManager
         binding!!.commentrecyclerView.adapter = commentAdapter
+    }
+    override fun onStart() {
+        super.onStart()
         commentAdapter.startListening()
+    }
+    override fun onStop() {
+        super.onStop()
+        commentAdapter.stopListening()
     }
 
     override fun onDestroy() {

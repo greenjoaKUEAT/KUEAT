@@ -34,7 +34,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             Comment(
                 "no info",
                 "no info",
-                0,
+                "no info",
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
                 0,
@@ -44,7 +44,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             Comment(
                 "no info",
                 "no info",
-                0,
+                "no info",
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
                 0,
@@ -53,7 +53,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             Comment(
                 "no info",
                 "no info",
-                0,
+                "no info",
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
                 0,
@@ -62,7 +62,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             Comment(
                 "no info",
                 "no info",
-                0,
+                "no info",
                 "인정 가격대가 좀 있긴 한대 맛있음",
                 1,
                 0,

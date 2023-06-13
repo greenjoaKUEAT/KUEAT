@@ -1,12 +1,16 @@
 package com.example.kueat.ui.home
 
+import android.annotation.SuppressLint
 import android.graphics.Rect
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
+import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
@@ -32,6 +36,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     lateinit var ReviewlayoutManager: LinearLayoutManager
     lateinit var reviewadapter :MyReviewAdapter
     lateinit var menuadapter: MyMenuAdapter
+    lateinit var dbRest : DatabaseReference
     lateinit var dbMenu : DatabaseReference
     lateinit var dbReview : DatabaseReference
     lateinit var dbULike : DatabaseReference
@@ -58,12 +63,18 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
 
     private fun initLayout() {
         initTab()
+        dbRest = Firebase.database.getReference("KueatDB/Restaurant")
+        dbRest.child(rest_id.toString()).get().addOnSuccessListener {
+            val map = it.getValue() as HashMap<String,Any>
+            binding!!.textRest.text = map.get("name").toString()
+        }
+
 //        val fragment = childFragmentManager.beginTransaction()
         val naverfragment = NaverFragment()
         val bundle  = Bundle()
         bundle.putString("rest_id",rest_id.toString())
         naverfragment.arguments = bundle
-        parentFragmentManager.beginTransaction().replace(R.id.map_frame,naverfragment).commit()
+        parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.map_frame,naverfragment).commit()
 
         dbULike = Firebase.database.getReference("KueatDB/LikedRestaurant")
         val key = rest_id.toString() + user!!.uid
@@ -98,9 +109,21 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         menuadapter = MyMenuAdapter(optionMenu)
 
         /*리뷰*/
+        binding!!.apply {
+            addReview.setOnClickListener {
+                val bundle  = Bundle()
+                bundle.putString("rest_id",rest_id.toString())
+                val reviewWriteFragment = WriteReviewFragment()
+                reviewWriteFragment.arguments = bundle
+                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.main_frm,reviewWriteFragment).commit()
+            }
+        }
+
+
         ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
-        dbReview = Firebase.database.getReference("KueatDB/Article")
+        dbReview = Firebase.database.getReference("KueatDB/Article/0")
         query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble())
+
         val optionReview = FirebaseRecyclerOptions.Builder<Article>()
             .setQuery(query, Article::class.java).build()
         reviewadapter = MyReviewAdapter(optionReview)
@@ -111,7 +134,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                 bundle.putString("review_id",reviewadapter.getItem(pos).article_id.toString())
                 val reviewFragment = ReviewFragment()
                 reviewFragment.arguments = bundle
-                parentFragmentManager.beginTransaction().replace(R.id.main_frm,reviewFragment).commit()
+                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.main_frm,reviewFragment).commit()
             }
         }
         binding!!.menurecyclerView.layoutManager = MenulayoutManager
@@ -120,8 +143,8 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         binding!!.reviewrecyclerView.layoutManager = ReviewlayoutManager
         binding!!.reviewrecyclerView.adapter = reviewadapter
 
-        menuadapter.startListening()
-        reviewadapter.startListening()
+//        menuadapter.startListening()
+//        reviewadapter.startListening()
 
     }
 
@@ -191,7 +214,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         }
     }
 
-    fun ScrollView.computeDistanceToView(view: View): Int {
+    fun NestedScrollView.computeDistanceToView(view: View): Int {
         return abs(calculateRectOnScreen(this).top - (this.scrollY + calculateRectOnScreen(view).top))
     }
 
@@ -205,25 +228,23 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             location[1] + view.measuredHeight
         )
     }
-    fun ScrollView.scrollToView(view: View) {
+    fun NestedScrollView.scrollToView(view: View) {
         val y = computeDistanceToView(view)
         this.scrollTo(0, y)
     }
     override fun onStart() {
         super.onStart()
-//        menuadapter.startListening()
-//        reviewadapter.startListening()
+        menuadapter.startListening()
+        reviewadapter.startListening()
     }
     override fun onStop() {
         super.onStop()
-//        menuadapter.stopListening()
-//        reviewadapter.stopListening()
+        menuadapter.stopListening()
+        reviewadapter.stopListening()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        menuadapter.stopListening()
-        reviewadapter.stopListening()
         binding = null
     }
 }

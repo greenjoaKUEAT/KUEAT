@@ -47,8 +47,8 @@ class AppealFragment : Fragment() {
     fun initData(){
         dataList = arrayListOf(
             Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "후문 카레 덮밥 맛집 코코도리",
@@ -58,8 +58,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "알촌",
@@ -69,8 +69,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "파란만잔",
@@ -80,8 +80,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "쌍둥이네 칼국수",
@@ -91,19 +91,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
-                0,
-                0,
-                "후문 카레 덮밥 맛집 코코도리",
-                "이 집 카레가 맛있습니다",
-                1,
-                1,
-                "05/12 20:12"
-            ),
-            Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "후문 카레 덮밥 맛집 코코도리",
@@ -113,19 +102,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
-                0,
-                0,
-                "후문 카레 덮밥 맛집 코코도리",
-                "이 집 카레가 맛있습니다",
-                1,
-                1,
-                "05/12 20:12"
-            ),
-            Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "후문 카레 덮밥 맛집 코코도리",
@@ -135,8 +113,8 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
-                0,
-                0,
+                "no info",
+                "no info",
                 0,
                 0,
                 "후문 카레 덮밥 맛집 코코도리",
@@ -146,8 +124,30 @@ class AppealFragment : Fragment() {
                 "05/12 20:12"
             ),
             Article(
+                "no info",
+                "no info",
                 0,
                 0,
+                "후문 카레 덮밥 맛집 코코도리",
+                "이 집 카레가 맛있습니다",
+                1,
+                1,
+                "05/12 20:12"
+            ),
+            Article(
+                "no info",
+                "no info",
+                0,
+                0,
+                "후문 카레 덮밥 맛집 코코도리",
+                "이 집 카레가 맛있습니다",
+                1,
+                1,
+                "05/12 20:12"
+            ),
+            Article(
+                "no info",
+                "no info",
                 0,
                 0,
                 "후문 카레 덮밥 맛집 코코도리",
