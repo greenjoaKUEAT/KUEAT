@@ -2,26 +2,16 @@ package com.example.kueat
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.startActivity
-import androidx.fragment.app.activityViewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment
 import com.example.kueat.databinding.ActivityMainBinding
-import com.example.kueat.`object`.Article
 import com.example.kueat.`object`.User
 import com.example.kueat.ui.account.AccountFragment
 import com.example.kueat.ui.account.EditNicknameFragment
 import com.example.kueat.ui.account.EditPasswordFragment
 import com.example.kueat.ui.appeal.AppealFragment
-import com.example.kueat.ui.filter.FilterMenuFragment
 import com.example.kueat.ui.home.HomeFragment
 import com.example.kueat.ui.home.RestaurantFragment
 import com.example.kueat.ui.home.ReviewFragment
