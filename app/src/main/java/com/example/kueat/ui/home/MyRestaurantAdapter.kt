@@ -49,14 +49,14 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
     FirebaseRecyclerAdapter<Restaurant, MyRestaurantAdapter.ViewHolder>(options) {
 
     private var locationManager: LocationManager? = null
-    private var currentLocation: Location? = null
     private val mainscope = CoroutineScope(Dispatchers.Main)
     lateinit var dbMenu: DatabaseReference
     private val TAG="restaurantAdapter"
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    lateinit var fusedLocationClient: FusedLocationProviderClient
     internal lateinit var mLocationRequest: LocationRequest
     lateinit var mLastLocation: Location
     var userLocation = location()
+    private var currentLocation: Location? = null
     interface OnItemClickListener {
         fun OnItemClick(position: Int, model: Restaurant)
     }
@@ -89,23 +89,17 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         Log.d("HI","HI")
 
         holder.binding.apply {
-
-
-
-
 //            restaurantImage.setImageResource(getUrl(model.photo))
             val imageUrl = model.photo
             Glide.with(restaurantImage)
                 .load(imageUrl)
                 .into(restaurantImage)
 
-
-
             textRestaurantName.text = model.name
             textTag.text = "#${model.tag_location} #${model.tag_type}"
             textRate.text = model.rating
             mainscope.launch {
-                val restaurantLocation = LatLng(model.location.Latitude.toDouble(), model.location.Longitude.toDouble()) // 식당 위치 정보
+                val restaurantLocation = LatLng(model.latitude.toDouble(), model.longitude.toDouble()) // 식당 위치 정보
                 restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
                 textSignature.text = "${getRepMenu(model.restaurant_id).await()}"
                 textEnd.visibility = View.VISIBLE
@@ -124,22 +118,10 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
                 dbMenu.get().addOnCompleteListener {
                     if (it.isSuccessful) {
                         for (data in it.result.children) {
-                            Log.e(
-                                TAG,
-                                "ValueEventListener-onDataChange : ${data.value}",
-                            )
                             val datas = data.value as Map<String, String>
                             var resId = datas["restaurant_id"]!!.toLong()
-                            Log.e(
-                                TAG,
-                                "menu : ${datas["restaurant_id"]}&$restaurantId / ${datas["signature"]}",
-                            )
 
                             if ((resId==restaurantId)&& datas["signature"]!!.equals("1")) {
-                                Log.e(
-                                    TAG,
-                                    "ValueEventListener-onDataChange : ${datas["restaurant_id"]}&$restaurantId",
-                                )
                                 datas["name"]?.let { it1 -> signatureArr.add(it1) }
                             }
                         }
@@ -171,8 +153,8 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
                     latitude = userLocation.Latitude.toDouble()
                     longitude = userLocation.Longitude.toDouble()
                 }
-            Log.d(TAG,"current : ${currentLocation!!.latitude}/${currentLocation!!.longitude}, current : ${restaurantLatLng!!.latitude}/${restaurantLatLng!!.longitude}")
-            Log.d(TAG, "${restaurantLocation}랑 ${currentLocation}의 거리 : ${currentLocation!!.distanceTo(restaurantLatLng).toInt()} ")
+//            Log.d(TAG,"current : ${currentLocation!!.latitude}/${currentLocation!!.longitude}, current : ${restaurantLatLng!!.latitude}/${restaurantLatLng!!.longitude}")
+//            Log.d(TAG, "${restaurantLocation}랑 ${currentLocation}의 거리 : ${currentLocation!!.distanceTo(restaurantLatLng).toInt()} ")
             return@async currentLocation!!.distanceTo(restaurantLatLng).toInt()
         }
     }
@@ -181,27 +163,20 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
         mLocationRequest =  LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 1000
+            fastestInterval = 800
         }
         var loc: location = location()
         return mainscope.async {
-            Log.d("restaurantAdapter","loc :0")
             if (permissions.all {
                     ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
                 }) {
                 fusedLocationClient.lastLocation
-                    .addOnSuccessListener { location: Location? ->
-                        // Got last known location. In some rare situations this can be null.
-//                        var geocoder = Geocoder(activity, Locale.KOREA)
-//                        if (location != null) {
-//                            loc = location(location.latitude.toString(), location.longitude.toString())
-//                            Log.d("restaurantAdapter","loc :${loc.Latitude}")
-//                        }
+                    .addOnSuccessListener {
                         fusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
 
                     }.await()
-                Log.d("restaurantAdapter","loc :1")
             }else{
-                Log.d("restaurantAdapter","loc :2")
             }
             return@async loc
         }
@@ -222,50 +197,8 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         Log.d(TAG,"userLoc : ${userLocation.Latitude}")
         notifyDataSetChanged()
     }
-    // 위치 권한을 확인하고 위치 서비스를 시작합니다.
-    private fun startLocationUpdates(context: Context) {
-        locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        // 위치 권한이 허용되었는지 확인합니다.
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            locationManager?.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                MIN_TIME_BETWEEN_UPDATES,
-                MIN_DISTANCE_CHANGE_FOR_UPDATES,
-                locationListener
-            )
-
-            // 최신 위치 정보를 가져옵니다.
-            val lastKnownLocation =
-                locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (lastKnownLocation != null) {
-                currentLocation = lastKnownLocation
-            }
-        }
+    fun stopLocationUpdate(){
+        fusedLocationClient.removeLocationUpdates(mLocationCallback)
     }
-
-    // 위치 서비스를 중지합니다.
-    private fun stopLocationUpdates() {
-        locationManager?.removeUpdates(locationListener)
-    }
-
-    companion object {
-        private const val MIN_TIME_BETWEEN_UPDATES: Long = 1000 // 최소 업데이트 간격 (1초)
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Float = 10.0f // 최소 업데이트 거리 (10미터)
-    }
-
-    // 위치 정보를 업데이트하는 LocationListener
-    private
-    val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location) {
-            currentLocation = location
-        }
-
-    }
-
-
 }

@@ -76,7 +76,7 @@ class LikeFragment : Fragment() {
 
     private fun initRecycler() {
         binding.recyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
-        likeAdapter = MyLikeAdapter(restaurantArr)
+        likeAdapter = MyLikeAdapter(restaurantArr, requireActivity())
         likeAdapter.itemClickListener=object:MyLikeAdapter.OnItemClickListener{
             override fun onItemClick(holder: MyLikeAdapter.ViewHolder, position: Int) {
                 binding.apply {
@@ -138,9 +138,8 @@ class LikeFragment : Fragment() {
                                 val resid = data.child("restaurant_id").value as Long
                                 val resTagLoc = data.child("tag_location").value as String
                                 val resTagType = data.child("tag_type").value as String
-                                val resLoclatitude = data.child("location").child("latitude").value as String
-                                val resLoclongitude = data.child("location").child("longitude").value as String
-                                val resLoc = location(resLoclatitude,resLoclongitude)
+                                val resLoclatitude = data.child("latitude").value as String
+                                val resLoclongitude = data.child("longitude").value as String
                                 for (like in likeArr) {
                                     if (resid==like) {
                                         Log.e(
@@ -148,7 +147,7 @@ class LikeFragment : Fragment() {
                                             "ValueEventListener-onDataChange : ${resid}&$like",
                                         )
                                         Log.e(TAG, "${resName}")
-                                        restaurantArr.add(Restaurant(resArticle,resLoc,resName,resPhoto,resRating,resid,resTagLoc,resTagType))
+                                        restaurantArr.add(Restaurant(resArticle,resLoclatitude,resLoclongitude,resName,resPhoto,resRating,resid,resTagLoc,resTagType))
                                     }
                                 }
                             }
@@ -170,5 +169,15 @@ class LikeFragment : Fragment() {
                 Log.d(TAG, "number" + likeAdapter.itemCount + "/ ${restaurantArr.size}")
             }
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try {
+            likeAdapter.stopLocationUpdate()
+        }catch (e:UninitializedPropertyAccessException){
+            Log.d(TAG,"lateinit exception")
+        }
+        Log.d(TAG,"stop")
     }
 }

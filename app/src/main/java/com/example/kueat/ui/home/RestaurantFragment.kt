@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide.init
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
 import com.example.kueat.`object`.Menu
@@ -59,6 +60,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initLayout()
+        initRecycler()
     }
 
     private fun initLayout() {
@@ -100,13 +102,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                 }
             }
         }
-        /*메뉴*/
-        MenulayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
-        dbMenu = Firebase.database.getReference("KueatDB/Menu")
-        var query = dbMenu.orderByChild("restaurant_id").equalTo(rest_id.toString())
-        val optionMenu = FirebaseRecyclerOptions.Builder<Menu>()
-            .setQuery(query, Menu::class.java).build()
-        menuadapter = MyMenuAdapter(optionMenu)
+
 
         /*리뷰*/
         binding!!.apply {
@@ -119,7 +115,17 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             }
         }
 
+    }
+    fun initRecycler(){
+        /*메뉴*/
+        MenulayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
+        dbMenu = Firebase.database.getReference("KueatDB/Menu")
+        var query = dbMenu.orderByChild("restaurant_id").equalTo(rest_id.toString())
+        val optionMenu = FirebaseRecyclerOptions.Builder<Menu>()
+            .setQuery(query, Menu::class.java).build()
+        menuadapter = MyMenuAdapter(optionMenu)
 
+        /*리뷰*/
         ReviewlayoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         dbReview = Firebase.database.getReference("KueatDB/Article/0")
         query = dbReview.orderByChild("restaurant_id").equalTo(rest_id.toDouble())
@@ -145,7 +151,6 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
 
 //        menuadapter.startListening()
 //        reviewadapter.startListening()
-
     }
 
     private fun initTab() {
@@ -234,11 +239,12 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
     }
     override fun onStart() {
         super.onStart()
+        initRecycler()
         menuadapter.startListening()
         reviewadapter.startListening()
     }
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroyView() {
+        super.onDestroyView()
         menuadapter.stopListening()
         reviewadapter.stopListening()
     }

@@ -1,12 +1,24 @@
 package com.example.kueat.ui.like
 
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.location.Location
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.LikerowBinding
 import com.example.kueat.`object`.Restaurant
+import com.example.kueat.`object`.location
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
@@ -20,11 +32,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class MyLikeAdapter(val items:ArrayList<Restaurant>)
+class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity)
     : RecyclerView.Adapter<MyLikeAdapter.ViewHolder>(){
     private val mainscope = CoroutineScope(Dispatchers.Main)
     lateinit var dbMenu: DatabaseReference
     private val TAG="likeFragment"
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    internal lateinit var mLocationRequest: LocationRequest
+    lateinit var mLastLocation: Location
+    var userLocation = location()
+    private var currentLocation: Location? = null
 
     interface OnItemClickListener{
         fun onItemClick(holder: ViewHolder,position:Int)
@@ -57,22 +74,10 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>)
                 dbMenu.get().addOnCompleteListener {
                     if (it.isSuccessful) {
                         for (data in it.result.children) {
-                            Log.e(
-                                TAG,
-                                "ValueEventListener-onDataChange : ${data.value}",
-                            )
                             val datas = data.value as Map<String, String>
                             var resId = datas["restaurant_id"]!!.toLong()
-                            Log.e(
-                                TAG,
-                                "menu : ${datas["restaurant_id"]}&$restaurantId / ${datas["signature"]}",
-                            )
 
                             if ((resId==restaurantId)&& datas["signature"]!!.equals("1")) {
-                                Log.e(
-                                    TAG,
-                                    "ValueEventListener-onDataChange : ${datas["restaurant_id"]}&$restaurantId",
-                                )
                                 datas["name"]?.let { it1 -> signatureArr.add(it1) }
                             }
                         }
@@ -100,11 +105,71 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>)
             textTag.text = "#${items[position].tag_location} #${items[position].tag_type}"
             textRate.text = items[position].rating
             mainscope.launch {
+                val restaurantLocation = LatLng(items[position].latitude.toDouble(), items[position].longitude.toDouble()) // 식당 위치 정보
+                restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
                 textSignature.text = "${getRepMenu(items[position].restaurant_id).await()}"
                 textEnd.visibility = View.VISIBLE
             }
         }
     }
+    private fun getDistance(
+        restaurantLocation: LatLng
+    ): Deferred<Int> {
+        val restaurantLatLng = Location("restaurant").apply {
+            latitude = restaurantLocation.latitude
+            longitude = restaurantLocation.longitude
+        }
+        return mainscope.async {
+            currentLocation = Location("restaurnat").apply {
+                getUserLocation().await()
+                latitude = userLocation.Latitude.toDouble()
+                longitude = userLocation.Longitude.toDouble()
+            }
+//            Log.d(TAG,"current : ${currentLocation!!.latitude}/${currentLocation!!.longitude}, current : ${restaurantLatLng!!.latitude}/${restaurantLatLng!!.longitude}")
+//            Log.d(TAG, "${restaurantLocation}랑 ${currentLocation}의 거리 : ${currentLocation!!.distanceTo(restaurantLatLng).toInt()} ")
+            return@async currentLocation!!.distanceTo(restaurantLatLng).toInt()
+        }
+    }
+    val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
+    fun getUserLocation(): Deferred<location> {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
+        mLocationRequest =  LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = 1000
+            fastestInterval = 800
+        }
+        var loc: location = location()
+        return mainscope.async {
+            if (permissions.all {
+                    ActivityCompat.checkSelfPermission(activity, it) == PackageManager.PERMISSION_GRANTED
+                }) {
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener {
+                        fusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
 
+                    }.await()
+            }else{
+            }
+            return@async loc
+        }
 
+    }
+    private val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
+            locationResult.lastLocation
+            onLocationChanged(locationResult.lastLocation)
+        }
+    }
+
+    // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
+    fun onLocationChanged(location: Location) {
+        mLastLocation = location
+        userLocation = location(mLastLocation.latitude.toString(),mLastLocation.longitude.toString())
+        Log.d(TAG,"userLoc : ${userLocation.Latitude}")
+        notifyDataSetChanged()
+    }
+    fun stopLocationUpdate(){
+        fusedLocationClient.removeLocationUpdates(mLocationCallback)
+    }
 }

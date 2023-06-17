@@ -54,7 +54,6 @@ class HomeFragment : Fragment() {
     lateinit var rdb: DatabaseReference
     var Loc = ""
     var Menu = ""
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +71,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+
         return binding.root
     }
 
@@ -84,6 +84,7 @@ class HomeFragment : Fragment() {
 
 //        showProgressBar()
         init()
+
     }
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
@@ -158,12 +159,18 @@ class HomeFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        init()
         adapter.startListening()
         Log.d("homeFragment","start")
     }
 
     override fun onStop() {
         super.onStop()
+        try {
+            adapter.stopLocationUpdate()
+        }catch (e:UninitializedPropertyAccessException){
+            Log.d("homeFragment","lateinit exception")
+        }
         adapter.stopListening()
         Log.d("homeFragment","stop")
     }
