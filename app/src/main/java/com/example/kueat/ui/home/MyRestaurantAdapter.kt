@@ -8,6 +8,7 @@ import android.location.Geocoder
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,9 @@ import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.database.DatabaseReference
@@ -50,8 +54,9 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
     lateinit var dbMenu: DatabaseReference
     private val TAG="restaurantAdapter"
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var userLocation:location
-
+    internal lateinit var mLocationRequest: LocationRequest
+    lateinit var mLastLocation: Location
+    var userLocation = location()
     interface OnItemClickListener {
         fun OnItemClick(position: Int, model: Restaurant)
     }
@@ -162,8 +167,9 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         }
         return mainscope.async {
             currentLocation = Location("restaurnat").apply {
-                    latitude = getUserLocation().await().Latitude.toDouble()
-                    longitude = getUserLocation().await().Longitude.toDouble()
+                    getUserLocation().await()
+                    latitude = userLocation.Latitude.toDouble()
+                    longitude = userLocation.Longitude.toDouble()
                 }
             Log.d(TAG,"current : ${currentLocation!!.latitude}/${currentLocation!!.longitude}, current : ${restaurantLatLng!!.latitude}/${restaurantLatLng!!.longitude}")
             Log.d(TAG, "${restaurantLocation}랑 ${currentLocation}의 거리 : ${currentLocation!!.distanceTo(restaurantLatLng).toInt()} ")
@@ -173,7 +179,9 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
     val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
     fun getUserLocation(): Deferred<location> {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(activity);
-
+        mLocationRequest =  LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        }
         var loc: location = location()
         return mainscope.async {
             Log.d("restaurantAdapter","loc :0")
@@ -183,11 +191,13 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
                 fusedLocationClient.lastLocation
                     .addOnSuccessListener { location: Location? ->
                         // Got last known location. In some rare situations this can be null.
-                        var geocoder = Geocoder(activity, Locale.KOREA)
-                        if (location != null) {
-                            loc = location(location.latitude.toString(), location.longitude.toString())
-                            Log.d("restaurantAdapter","loc :${loc.Latitude}")
-                        }
+//                        var geocoder = Geocoder(activity, Locale.KOREA)
+//                        if (location != null) {
+//                            loc = location(location.latitude.toString(), location.longitude.toString())
+//                            Log.d("restaurantAdapter","loc :${loc.Latitude}")
+//                        }
+                        fusedLocationClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+
                     }.await()
                 Log.d("restaurantAdapter","loc :1")
             }else{
@@ -197,7 +207,21 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         }
 
     }
+    private val mLocationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
+            locationResult.lastLocation
+            onLocationChanged(locationResult.lastLocation)
+        }
+    }
 
+    // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
+    fun onLocationChanged(location: Location) {
+        mLastLocation = location
+        userLocation = location(mLastLocation.latitude.toString(),mLastLocation.longitude.toString())
+        Log.d(TAG,"userLoc : ${userLocation.Latitude}")
+        notifyDataSetChanged()
+    }
     // 위치 권한을 확인하고 위치 서비스를 시작합니다.
     private fun startLocationUpdates(context: Context) {
         locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
