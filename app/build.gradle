@@ -80,6 +80,7 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
+    implementation("com.google.android.gms:play-services-location:16.0.0")
 
     // Firebase 종속성
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'  // 버전을 20.1.0으로 일치시킴

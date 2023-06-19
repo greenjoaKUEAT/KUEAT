@@ -39,7 +39,7 @@ class NaverFragment : Fragment() , OnMapReadyCallback{
         super.onViewCreated(view, savedInstanceState)
         rdb = Firebase.database.getReference("KueatDB/Restaurant")
         rdb.child(rest_id.toString()).get().addOnSuccessListener {
-            val map = it.child("location").getValue() as HashMap<String,Any>
+            val map = it.getValue() as HashMap<String,Any>
             val lat = map.get("latitude").toString()
             val lon = map.get("longitude").toString()
             loc = location(lat,lon)
