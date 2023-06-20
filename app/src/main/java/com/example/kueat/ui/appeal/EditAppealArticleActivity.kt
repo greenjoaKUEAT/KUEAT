@@ -24,7 +24,7 @@ class EditAppealArticleActivity : AppCompatActivity() {
     }
 
     fun initLayout() {
-        articleDBReference = Firebase.database.getReference("KueatDB/Article/0")
+        articleDBReference = Firebase.database.getReference("KueatDB/Article/1")
 
         binding.ivEditAppealArticleBackButton.setOnClickListener {
             finish()

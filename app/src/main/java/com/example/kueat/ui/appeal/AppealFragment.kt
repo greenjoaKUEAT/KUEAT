@@ -31,10 +31,10 @@ class AppealFragment : Fragment() {
     }
 
     fun initLayout(){
-        articleDbReference = Firebase.database.getReference("KueatDB/Article/0")
+        articleDbReference = Firebase.database.getReference("KueatDB/Article/1")
 
         binding.rvAppealArticle.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        var query = articleDbReference.orderByChild("type").equalTo(1.0)
+        var query = articleDbReference.orderByChild("date").limitToFirst(50)
         val articleOptions = FirebaseRecyclerOptions.Builder<Article>()
             .setQuery(query, Article::class.java).build()
         adapter = AppealArticleAdapter(articleOptions)
