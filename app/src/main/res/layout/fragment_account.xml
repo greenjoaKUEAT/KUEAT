@@ -101,7 +101,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:bufferType="spannable"
-                        android:text="내 청원  0개"
+                        android:text="내 추천  0개"
                         android:textColor="@color/black" />
                 </LinearLayout>
 
