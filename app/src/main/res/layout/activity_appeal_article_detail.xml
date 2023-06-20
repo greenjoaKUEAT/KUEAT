@@ -19,7 +19,6 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginHorizontal="10dp"
         android:layout_weight="1">
 
         <LinearLayout
@@ -32,6 +31,7 @@
                 android:id="@+id/cl_article_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
@@ -78,6 +78,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="10dp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -87,7 +88,7 @@
                 android:id="@+id/tv_appeal_article_detail_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
+                android:layout_marginHorizontal="18dp"
                 android:textColor="@color/black"
                 android:text="" />
 
@@ -111,7 +112,8 @@
                     android:id="@+id/tv_appeal_article_detail_liked_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textSize="15sp"
+                    android:textColor="@color/black"
                     android:layout_marginEnd="10dp"
                     android:text="0" />
 
@@ -125,18 +127,22 @@
                     android:id="@+id/tv_appeal_article_detail_comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:textSize="15sp"
                     android:layout_marginEnd="10dp"
                     android:text="0" />
             </LinearLayout>
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="10dp"
+                android:background="#EAEAEA"/>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_appeal_article_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                
-                android:layout_marginVertical="30dp"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginVertical="10dp"
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
@@ -154,14 +160,19 @@
 
         <EditText
             android:id="@+id/et_appeal_article_detail_comment"
-            android:layout_width="340dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:hint="댓글입력"
+            android:maxLines="1"
+            android:background="@null"
             android:paddingLeft="10dp" />
 
         <ImageView
             android:id="@+id/iv_appeal_article_detail_comment_button"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
+            android:padding="5dp"
             android:layout_height="match_parent"
             android:src="@drawable/enter_style" />
 

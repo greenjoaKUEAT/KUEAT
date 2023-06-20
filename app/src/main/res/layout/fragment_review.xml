@@ -14,9 +14,9 @@
         android:layout_weight="1">
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingVertical="30dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -119,30 +119,33 @@
                 />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
+
     <LinearLayout
-        android:background="@drawable/comment_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@drawable/comment_style"
         android:orientation="horizontal"
         android:padding="5dp"
-        >
+        android:layout_margin="5dp">
+
         <EditText
             android:id="@+id/commentEdit"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:layout_marginLeft="10dp"
             android:hint="댓글입력"
             android:maxLines="1"
-            />
+            android:background="@null"
+            android:paddingLeft="10dp" />
 
         <ImageView
             android:id="@+id/enter"
-            android:layout_width="20dp"
+            android:layout_width="30dp"
+            android:padding="5dp"
             android:layout_height="match_parent"
             android:src="@drawable/enter_style" />
 
     </LinearLayout>
-
 
 </LinearLayout>
