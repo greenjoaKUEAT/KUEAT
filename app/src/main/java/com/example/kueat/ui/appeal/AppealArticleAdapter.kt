@@ -1,12 +1,15 @@
 package com.example.kueat.ui.appeal
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ItemAppealArticleBinding
 import com.example.kueat.`object`.Article
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class AppealArticleAdapter(val items: ArrayList<Article>) : RecyclerView.Adapter<AppealArticleAdapter.ViewHolder>() {
+class AppealArticleAdapter(val options : FirebaseRecyclerOptions<Article>) : FirebaseRecyclerAdapter<Article, AppealArticleAdapter.ViewHolder>(options) {
 
     var OnItemClickListener: onItemClickListener? = null
 
@@ -15,14 +18,9 @@ class AppealArticleAdapter(val items: ArrayList<Article>) : RecyclerView.Adapter
     }
 
     inner class ViewHolder(val binding: ItemAppealArticleBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(position: Int){
-            val article = items[position]
-            binding.tvAppealArticleTitle.text = article.title
-            binding.tvAppealArticleDescription.text = article.content
-            binding.tvAppealArticleLike.text = article.liked_user_number.toString()
-            binding.tvAppealArticleComment.text = article.comment_number.toString()
-            binding.llAppealArticle.setOnClickListener {
-                OnItemClickListener?.onItemClicked(position)
+        init {
+            binding.root.setOnClickListener {
+                OnItemClickListener?.onItemClicked(bindingAdapterPosition)
             }
         }
     }
@@ -32,11 +30,15 @@ class AppealArticleAdapter(val items: ArrayList<Article>) : RecyclerView.Adapter
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: AppealArticleAdapter.ViewHolder, position: Int) {
-        holder.bind(position)
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Article) {
+        holder.binding.apply {
+            tvAppealArticleTitle.text = model.title
+            tvAppealArticleDescription.text = model.content
+            tvAppealArticleLike.text = model.liked_user_number.toString()
+            tvAppealArticleComment.text = model.comment_number.toString()
+            llAppealArticle.setOnClickListener {
+                OnItemClickListener?.onItemClicked(position)
+            }
+        }
     }
 }

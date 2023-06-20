@@ -5,32 +5,40 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kueat.databinding.ItemAppealArticleCommentBinding
 import com.example.kueat.`object`.Comment
+import com.firebase.ui.database.FirebaseRecyclerAdapter
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 
-class AppealArticleCommentAdapter(var items: ArrayList<Comment>) : RecyclerView.Adapter<AppealArticleCommentAdapter.ViewHolder>() {
+class AppealArticleCommentAdapter(var options: FirebaseRecyclerOptions<Comment>) :
+    FirebaseRecyclerAdapter<Comment, AppealArticleCommentAdapter.ViewHolder>(options) {
 
-    inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) : RecyclerView.ViewHolder(binding.root){
-        fun bind(position: Int){
-            val item = items[position]
-            binding.tvAppealArticleCommentUser.text = "익명" + item.user_id.toString()
-            binding.tvAppealArticleCommentConetent.text = item.content
-            binding.tvAppealArticleCommentDate.text = item.date
-            binding.tvAppealArticleCommentLikedUser.text = item.liked_user_number.toString()
-        }
+    inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+            init {
+
+            }
     }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
     ): AppealArticleCommentAdapter.ViewHolder {
-        val binding = ItemAppealArticleCommentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = ItemAppealArticleCommentBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
         return ViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return items.size
-    }
-
-    override fun onBindViewHolder(holder: AppealArticleCommentAdapter.ViewHolder, position: Int) {
-        holder.bind(position)
+    override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Comment) {
+        val db = Firebase.database.getReference("KueatDB/LikedComment")
+        holder.binding.apply {
+            tvAppealArticleCommentUser.text = "익명" + model.user_id.toString()
+            tvAppealArticleCommentConetent.text = model.content
+            tvAppealArticleCommentDate.text = model.date
+            tvAppealArticleCommentLikedUser.text = model.liked_user_number.toString()
+        }
     }
 }
