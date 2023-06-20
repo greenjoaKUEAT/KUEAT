@@ -22,6 +22,8 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import com.example.kueat.*
 import com.example.kueat.databinding.FragmentAccountBinding
+import com.example.kueat.`object`.Article
+import com.example.kueat.`object`.Restaurant
 import com.example.kueat.`object`.User
 import com.example.kueat.ui.home.HomeFragment
 import com.example.kueat.ui.home.RestaurantFragment
@@ -56,6 +58,7 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initText()
@@ -65,29 +68,28 @@ class AccountFragment : Fragment() {
     }
 
     private fun initBtn() {
-        binding.apply{
+        binding.apply {
             textSchool.setOnClickListener {
                 sendEmail()
             }
-            textPassword.setOnClickListener{
+            textPassword.setOnClickListener {
                 editPassword()
             }
             textNickname.setOnClickListener {
                 editNickname()
             }
-            textLogout.setOnClickListener{
+            textLogout.setOnClickListener {
                 auth.signOut()
-                Toast.makeText(context,"로그아웃되었습니다.",Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show()
                 changeStartActivity()
             }
-            textOut.setOnClickListener{
+            textOut.setOnClickListener {
                 outAlertDlg()
             }
             testRest.setOnClickListener {
-                val fragment
-                        = requireActivity().supportFragmentManager.beginTransaction()
+                val fragment = requireActivity().supportFragmentManager.beginTransaction()
                 val restFragment = RestaurantFragment()
-                fragment.replace(R.id.main_frm,restFragment)
+                fragment.replace(R.id.main_frm, restFragment)
                 fragment.commit()
             }
         }
@@ -106,9 +108,9 @@ class AccountFragment : Fragment() {
     private fun sendEmail() {
         user.reload().addOnSuccessListener {
             user = Firebase.auth.currentUser!!
-            if(user.isEmailVerified){
-                Toast.makeText(context,"인증된 계정입니다.",Toast.LENGTH_SHORT).show()
-            }else {
+            if (user.isEmailVerified) {
+                Toast.makeText(context, "인증된 계정입니다.", Toast.LENGTH_SHORT).show()
+            } else {
                 user.sendEmailVerification()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -136,15 +138,14 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun outAlertDlg(){
+    private fun outAlertDlg() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("정말로 회원 탈퇴를 하시겠습니까?")
             .setTitle("회원 탈퇴")
-            .setPositiveButton("아니요"){
-                    dlg,_->dlg.dismiss()
+            .setPositiveButton("아니요") { dlg, _ ->
+                dlg.dismiss()
 
-            }.setNegativeButton("네"){
-                    _, _->
+            }.setNegativeButton("네") { _, _ ->
                 run {
                     deleteUser()
                 }
@@ -161,18 +162,18 @@ class AccountFragment : Fragment() {
                     Log.d(TAG, "User account deleted.")
                     kueatDB = Firebase.database.getReference("KueatDB/User")
                     kueatDB.child(uid).removeValue()
-                    Toast.makeText(context,"회원 탈퇴 성공",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
                     changeStartActivity()
-                }
-                else{
-                    Toast.makeText(context,"다시 로그인 후 이용해주세요.",Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, "다시 로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
                     auth.signOut()
                     changeStartActivity()
                 }
             }
     }
+
     private fun changeStartActivity() {
-        val intent = Intent(requireActivity(),StartActivity::class.java)
+        val intent = Intent(requireActivity(), StartActivity::class.java)
         startActivity(intent)
     }
 
@@ -180,24 +181,114 @@ class AccountFragment : Fragment() {
         var textAppeal = binding.countAppeal
         var textReview = binding.countReview
         var textComment = binding.countComment
-        val dataAppeal = textAppeal.text.toString()
-        val dataReview = textReview.text.toString()
-        val dataComment = textComment.text.toString()
-        val builderAppeal = SpannableStringBuilder(dataAppeal)
-        val builderReview = SpannableStringBuilder(dataReview)
-        val builderComment = SpannableStringBuilder(dataComment)
-
         val colorPinkSpan = ForegroundColorSpan(Color.rgb(255, 156, 156))
-        builderAppeal.setSpan(colorPinkSpan,5,dataAppeal.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-//        builderAppeal.setSpan(UnderlineSpan(),5,dataAppeal.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-        builderReview.setSpan(colorPinkSpan,5,dataReview.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-//        builderReview.setSpan(UnderlineSpan(),5,dataReview.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-        builderComment.setSpan(colorPinkSpan,5,dataComment.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-//        builderComment.setSpan(UnderlineSpan(),5,dataComment.length-1,SPAN_EXCLUSIVE_INCLUSIVE)
-        textAppeal.text = builderAppeal
-        textReview.text = builderReview
-        textComment.text = builderComment
 
+        var reviewDB = Firebase.database.getReference("KueatDB/Article/0")
+        reviewDB.get().addOnSuccessListener {
+            val map = it.getValue() as HashMap<String, Any>
+            Log.d("qwerty123", map.toString())
+            var size = 0
+            for (mutableEntry in map) {
+                val e = mutableEntry.value as HashMap<String, Any>
+                if(e.get("user_id").toString() == user.uid)
+                    size = size + 1
+            }
+            Log.d("qwerty123", size.toString())
+            if(size >= 10)
+                textReview.text = "내 리뷰 " + size.toString() + "개"
+            else
+                textReview.text = "내 리뷰  " + size.toString() + "개"
 
+            val dataReview = textReview.text.toString()
+            Log.d("qwerty123", dataReview)
+            val builderReview = SpannableStringBuilder(dataReview)
+            if (size >= 10)
+                builderReview.setSpan(
+                    colorPinkSpan,
+                    4,
+                    dataReview.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            else
+                builderReview.setSpan(
+                    colorPinkSpan,
+                    5,
+                    dataReview.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            textReview.text = builderReview
+        }
+
+        var articleDB = Firebase.database.getReference("KueatDB/Article/1")
+        articleDB.get().addOnSuccessListener {
+            val map = it.getValue() as HashMap<String, Any>
+            Log.d("qwerty123", map.toString())
+            var size = 0
+            for (mutableEntry in map) {
+                val e = mutableEntry.value as HashMap<String, Any>
+                if(e.get("user_id").toString() == user.uid)
+                    size = size + 1
+            }
+            Log.d("qwerty123", size.toString())
+            if(size >= 10)
+                textAppeal.text = "내 추천 " + size.toString() + "개"
+            else
+                textAppeal.text = "내 추천  " + size.toString() + "개"
+
+            val dataAppeal = textAppeal.text.toString()
+            Log.d("qwerty123", dataAppeal)
+            val builderAppeal = SpannableStringBuilder(dataAppeal)
+            if (size >= 10)
+                builderAppeal.setSpan(
+                    colorPinkSpan,
+                    4,
+                    dataAppeal.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            else
+                builderAppeal.setSpan(
+                    colorPinkSpan,
+                    5,
+                    dataAppeal.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            textAppeal.text = builderAppeal
+        }
+
+        var commentDB = Firebase.database.getReference("KueatDB/Comment")
+        commentDB.get().addOnSuccessListener {
+            val map = it.getValue() as HashMap<String, Any>
+            Log.d("qwerty123", map.toString())
+            var size = 0
+            for (mutableEntry in map) {
+                val e = mutableEntry.value as HashMap<String, Any>
+                if(e.get("user_id").toString() == user.uid)
+                    size = size + 1
+            }
+            Log.d("qwerty123", size.toString())
+            if(size >= 10)
+                textComment.text = "내 댓글 " + size.toString() + "개"
+            else
+                textComment.text = "내 댓글  " + size.toString() + "개"
+
+            val dataComment = textComment.text.toString()
+            Log.d("qwerty123", dataComment)
+            val builderComment = SpannableStringBuilder(dataComment)
+            if (size >= 10)
+                builderComment.setSpan(
+                    colorPinkSpan,
+                    4,
+                    dataComment.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            else
+                builderComment.setSpan(
+                    colorPinkSpan,
+                    5,
+                    dataComment.length - 1,
+                    SPAN_EXCLUSIVE_INCLUSIVE
+                )
+            textComment.text = builderComment
+        }
     }
 }
