@@ -108,19 +108,21 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val c
             textTag.text = "#${items[position].tag_location} #${items[position].tag_type}"
             textRate.text = items[position].rating
             mainscope.launch {
+                var firebaseStorage = FirebaseStorage.getInstance()
+                Log.d("qwerty123", firebaseStorage.toString());
+                var firebaseStorageRef = firebaseStorage.getReference("alchon.jpg")
+                Log.d("qwerty123", firebaseStorageRef.toString());
+                var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
+                    Glide.with(context).load(it).into(restaurantImage)
+                    Log.d("qwerty123", it.toString());
+                }
                 val restaurantLocation = LatLng(items[position].latitude.toDouble(), items[position].longitude.toDouble()) // 식당 위치 정보
                 restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
                 textSignature.text = "${getRepMenu(items[position].restaurant_id).await()}"
                 textEnd.visibility = View.VISIBLE
+
             }
-            var firebaseStorage = FirebaseStorage.getInstance()
-            Log.d("qwerty123", firebaseStorage.toString());
-            var firebaseStorageRef = firebaseStorage.getReference("alchon.jpg")
-            Log.d("qwerty123", firebaseStorageRef.toString());
-            var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
-                Glide.with(context).load(it).into(restaurantImage)
-                Log.d("qwerty123", it.toString());
-            }
+
         }
     }
     private fun getDistance(

@@ -123,7 +123,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 user!!.uid,
                 article.article_id,
                 binding.etAppealArticleAddCommentText.text.toString(),
-                article.liked_user_number,
+                0,
                 0,
                 current,
                 mutableMapOf()

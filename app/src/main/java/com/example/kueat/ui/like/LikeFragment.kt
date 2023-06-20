@@ -41,8 +41,6 @@ class LikeFragment : Fragment() {
     var user = Firebase.auth.currentUser!!
     val uid = user.uid
     val TAG = "likeFragment"
-    var Loc=""
-    var Menu=""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,10 +52,6 @@ class LikeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        arguments?.let {
-            Loc = it.getString("Loc").toString()
-            Menu = it.getString("Menu")!!
-        }
         dbLikeRestaurant = Firebase.database.getReference("KueatDB/LikedRestaurant")
         dbRestaurant = Firebase.database.getReference("KueatDB/Restaurant")
         initRecycler()
@@ -67,11 +61,7 @@ class LikeFragment : Fragment() {
 
     private fun initBtn() {
         binding.backHomeButton.setOnClickListener{
-            val bundle = Bundle()
-            bundle.putString("Loc", Loc)
-            bundle.putString("Menu", Menu)
             val homeFragment = HomeFragment()
-            homeFragment.arguments = bundle
             (activity as MainActivity).changeBottomIconHome()
             requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frm, homeFragment).commit()
         }
@@ -86,14 +76,6 @@ class LikeFragment : Fragment() {
                     val intent = Intent(activity,RestaruantActivity::class.java)
                     intent.putExtra("rest_id",likeAdapter.items[position].restaurant_id)
                     startActivity(intent)
-                    /*
-                    val bundle = Bundle()
-                    bundle.putLong("restaurant",likeAdapter.items[position].restaurant_id)
-                    val restaurantFragment = RestaurantFragment()
-                    restaurantFragment.arguments = bundle
-                    (activity as MainActivity).changeBottomIconHome()
-                    requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frm, restaurantFragment).commit()
-                    */
                 }
             }
         }

@@ -26,6 +26,7 @@ import com.example.kueat.databinding.ActivityMainBinding
 import com.example.kueat.`object`.Article
 import com.example.kueat.`object`.User
 import com.example.kueat.`object`.location
+import com.example.kueat.sharedpreference.MyTag
 import com.example.kueat.ui.account.AccountFragment
 import com.example.kueat.ui.account.EditNicknameFragment
 import com.example.kueat.ui.account.EditPasswordFragment
@@ -60,6 +61,7 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     lateinit var kueatDB: DatabaseReference
     val userModel: MyUserModel by viewModels()
     val user = Firebase.auth.currentUser
+    lateinit var sharedPref: MyTag
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,10 +71,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
         val callback = onBackPressedDispatcher.addCallback(this) {
             backPressed()
         }
+        sharedPref = MyTag(this)
 
-        Loc= intent.getStringExtra("Loc").toString()
-        Menu= intent.getStringExtra("Menu").toString()
-
+        Loc= sharedPref.getMyLoc(this)
+        Menu= sharedPref.getMyMenu(this)
+        Log.d("MainShared", "$Loc, $Menu")
         initUser()
         init()
 
@@ -108,19 +111,11 @@ class MainActivity : AppCompatActivity(), NavigationBarView.OnItemSelectedListen
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.navigation_like -> {
-                val bundle = Bundle()
-                bundle.putString("Loc", Loc)
-                bundle.putString("Menu", Menu)
                 val likeFragment = LikeFragment()
-                likeFragment.arguments = bundle
                 supportFragmentManager.beginTransaction().replace(R.id.main_frm, likeFragment).commit()
             }
             R.id.navigation_home -> {
-                val bundle = Bundle()
-                bundle.putString("Loc", Loc)
-                bundle.putString("Menu", Menu)
                 val homeFragment = HomeFragment()
-                homeFragment.arguments = bundle
                 supportFragmentManager.beginTransaction().replace(R.id.main_frm, homeFragment).commit()
 
                 //supportFragmentManager.beginTransaction().replace(R.id.main_frm, HomeFragment()).commit()
