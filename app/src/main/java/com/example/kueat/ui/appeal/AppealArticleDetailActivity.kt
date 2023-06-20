@@ -76,9 +76,15 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             }
 
             userDBReference = Firebase.database.getReference("KueatDB/User")
-            userDBReference.child(article.user_id).get().addOnSuccessListener {
-                val map = it.getValue() as HashMap<String, Any>
-                binding.tvAppealArticleDetailProfileName.text = map.get("nickname").toString()
+            userDBReference.child(article.user_id).get().addOnCompleteListener {
+                if(it.isSuccessful){
+                    var usr_nickname = it.result.child("nickname").getValue().toString()
+                    Log.d("check",usr_nickname)
+                    if(usr_nickname!="null")
+                        binding.tvAppealArticleDetailProfileName.text = usr_nickname
+                    else
+                        binding.tvAppealArticleDetailProfileName.text = "(알 수 없음)"
+                }
             }
         }
 
@@ -131,6 +137,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             binding.etAppealArticleDetailComment.text.clear()
 
             commentDBReference.child(key!!).setValue(comment).addOnSuccessListener {
+
                 article.comment_number = article.comment_number + 1
                 articleDBReference.child(article.article_id).setValue(article)
                 binding.tvAppealArticleDetailComments.text = article.comment_number.toString()
