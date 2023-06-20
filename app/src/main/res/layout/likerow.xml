@@ -31,6 +31,8 @@
             android:layout_height="@dimen/like_row_img_size"
             android:background="@drawable/style_restaurant_img_background"
             android:layout_gravity="center_vertical"
+            android:clipToOutline="true"
+            android:scaleType="centerCrop"
             app:srcCompat="@drawable/image_like" />
 
         <LinearLayout
@@ -48,7 +50,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:ems="5"
+                    android:ems="4"
                     android:maxLines="1"
                     android:text="알촌"
                     android:textColor="@color/black"

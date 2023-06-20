@@ -98,8 +98,8 @@
 
                 <ImageView
                     android:id="@+id/iv_appeal_article_detail_like_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_article_like" />
 
@@ -107,12 +107,13 @@
                     android:id="@+id/tv_appeal_article_detail_liked_user"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:layout_marginEnd="10dp"
                     android:text="0" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginEnd="10dp"
                     android:src="@drawable/ic_article_comment" />
 
@@ -120,6 +121,7 @@
                     android:id="@+id/tv_appeal_article_detail_comments"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="16sp"
                     android:layout_marginEnd="10dp"
                     android:text="0" />
             </LinearLayout>
