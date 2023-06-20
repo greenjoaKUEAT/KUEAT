@@ -20,6 +20,7 @@ class WriteReviewFragment : Fragment() {
     var binding:FragmentWriteReviewBinding ?=null
     lateinit var dbReview : DatabaseReference
     var rest_id = 0
+    lateinit var dbRest :DatabaseReference
     val user = Firebase.auth.currentUser
     var write = 1
     override fun onCreateView(
@@ -37,6 +38,7 @@ class WriteReviewFragment : Fragment() {
     }
 
     fun initLayout(){
+        dbRest = Firebase.database.getReference("KueatDB/Restaurant")
         dbReview = Firebase.database.getReference("KueatDB/Article/0")
         binding!!.apply {
             tvConfirmEditArticle.setOnClickListener {
@@ -51,7 +53,15 @@ class WriteReviewFragment : Fragment() {
                     dbReview.child(key!!).setValue(item).addOnSuccessListener {
                         write = 1
                         activity?.onBackPressed()
+                        dbRest.child(rest_id.toString())
+                            .get().addOnSuccessListener {
+                                val map = it.getValue() as HashMap<String,Any>
+                                val size = map.get("article_number").toString().toInt()
+                                dbRest.child(rest_id.toString()).child("article_number").setValue(size+1)
+                            }
+
                     }
+                    dbRest.child(rest_id.toString()).child("article_number")
                 }
 
             }
