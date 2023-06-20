@@ -1,5 +1,6 @@
 package com.example.kueat.ui.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -38,9 +39,12 @@ class MyCommentAdapter(options: FirebaseRecyclerOptions<Comment>)
         val ref = Firebase.database.getReference("KueatDB/User")
         val nickname = ref.child(model.user_id).get().addOnCompleteListener {
             if(it.isSuccessful){
-                holder.binding.tvAppealArticleCommentUser.text = it.result.child("nickname").getValue().toString()
-            }else{
-                holder.binding.tvAppealArticleCommentUser.text = "(알수없음)"
+                var usr_nickname = it.result.child("nickname").getValue().toString()
+                Log.d("check",usr_nickname)
+                if(usr_nickname!="null")
+                    holder.binding.tvAppealArticleCommentUser.text = usr_nickname
+                else
+                    holder.binding.tvAppealArticleCommentUser.text = "(알 수 없음)"
             }
         }
 
