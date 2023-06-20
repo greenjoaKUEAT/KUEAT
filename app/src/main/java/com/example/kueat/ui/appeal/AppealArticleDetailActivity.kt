@@ -3,6 +3,7 @@ package com.example.kueat.ui.appeal
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
@@ -24,8 +25,10 @@ class AppealArticleDetailActivity : AppCompatActivity() {
     lateinit var binding: ActivityAppealArticleDetailBinding
     lateinit var adapter: AppealArticleCommentAdapter
     lateinit var commentDBReference: DatabaseReference
+    lateinit var commentLikeDBReference: DatabaseReference
     lateinit var articleDBReference: DatabaseReference
     lateinit var restaurantLikeDBReference: DatabaseReference
+    lateinit var userDBReference: DatabaseReference
     var user = Firebase.auth.currentUser
     lateinit var article: Article
     var isLikedArticle = false
@@ -39,9 +42,8 @@ class AppealArticleDetailActivity : AppCompatActivity() {
     fun initLayout() {
         val articleKey = intent.getStringExtra("article_key")
         articleDBReference = Firebase.database.getReference("KueatDB/Article/0")
-
-        articleDBReference.get().addOnSuccessListener {
-            val map = it.child(articleKey!!).getValue() as HashMap<String, Any>
+        articleDBReference.child(articleKey!!).get().addOnSuccessListener {
+            val map = it.getValue() as HashMap<String, Any>
             article = Article(
                 article_id = map.get("article_id").toString(),
                 title = map.get("title").toString(),
@@ -53,56 +55,28 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 type = map.get("type").toString().toInt(),
                 user_id = map.get("user_id").toString(),
             )
-            binding!!.apply {
-                //tvAppealArticleDetailProfileName.text = map.get("date").toString()
+            binding.apply {
                 tvAppealArticleDetailProfileDate.text = article.date
                 tvAppealArticleDetailTitle.text = article.title
                 tvAppealArticleDetailContent.text = article.content
                 tvAppealArticleDetailLikedUser.text = article.liked_user_number.toString()
                 tvAppealArticleDetailComments.text = article.comment_number.toString()
             }
-        }
 
-        commentDBReference = Firebase.database.getReference("KueatDB/Comment")
-        binding.rvAppealArticleComment.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        var query = commentDBReference.orderByChild("article_id").equalTo(articleKey)
-        val commentOptions = FirebaseRecyclerOptions.Builder<Comment>()
-            .setQuery(query, Comment::class.java).build()
-        adapter = AppealArticleCommentAdapter(commentOptions)
-        binding.rvAppealArticleComment.adapter = adapter
-        adapter.startListening()
-
-        binding.ivAppealArticleAddCommentButton.setOnClickListener {
-            val key = commentDBReference.push().key
-            val currentTime = Calendar.getInstance().time
-            val dataFormat = SimpleDateFormat("MM/dd HH:MM")
-            val current = dataFormat.format(currentTime)
-            val comment = Comment(
-                key!!,
-                user!!.uid,
-                article.article_id,
-                binding.etAppealArticleAddCommentText.text.toString(),
-                article.liked_user_number,
-                0,
-                current
-            )
-            binding.etAppealArticleAddCommentText.text.clear()
-
-            commentDBReference.child(key!!).setValue(comment).addOnSuccessListener {
-                article.comment_number = article.comment_number + 1
-                articleDBReference.child(article.article_id).setValue(article)
-                binding.tvAppealArticleDetailComments.text = article.comment_number.toString()
+            userDBReference = Firebase.database.getReference("KueatDB/User")
+            userDBReference.child(article.user_id).get().addOnSuccessListener {
+                val map = it.getValue() as HashMap<String, Any>
+                binding.tvAppealArticleDetailProfileName.text = map.get("nickname").toString()
             }
         }
 
-
         restaurantLikeDBReference = Firebase.database.getReference("KueatDB/LikedArticle")
-        restaurantLikeDBReference.get().addOnSuccessListener {
-            isLikedArticle = it.child(article.article_id + user!!.uid).exists()
+        restaurantLikeDBReference.child(articleKey + user!!.uid).get().addOnSuccessListener {
+            isLikedArticle = it.exists()
             if(isLikedArticle)
                 binding.tvAppealArticleDetailLikedUser.setTextColor(getColor(R.color.pink))
         }
+
         binding.ivAppealArticleDetailLikeButton.setOnClickListener {
             if (isLikedArticle) {
                 restaurantLikeDBReference.child(article.article_id + user!!.uid).removeValue()
@@ -124,6 +98,64 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             binding.tvAppealArticleDetailLikedUser.text =
                 article.liked_user_number.toString()
         }
+
+        binding.ivAppealArticleAddCommentButton.setOnClickListener {
+            val key = commentDBReference.push().key
+            val currentTime = System.currentTimeMillis()
+            Log.d("qwerty123" ,currentTime.toString())
+            val dataFormat = SimpleDateFormat("MM/dd HH:mm")
+            val current = dataFormat.format(currentTime)
+            Log.d("qwerty123" ,current)
+            val comment = Comment(
+                key!!,
+                user!!.uid,
+                article.article_id,
+                binding.etAppealArticleAddCommentText.text.toString(),
+                article.liked_user_number,
+                0,
+                current
+            )
+            binding.etAppealArticleAddCommentText.text.clear()
+
+            commentDBReference.child(key!!).setValue(comment).addOnSuccessListener {
+                article.comment_number = article.comment_number + 1
+                articleDBReference.child(article.article_id).setValue(article)
+                binding.tvAppealArticleDetailComments.text = article.comment_number.toString()
+            }
+        }
+
+        commentDBReference = Firebase.database.getReference("KueatDB/Comment")
+        binding.rvAppealArticleComment.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        var query = commentDBReference.orderByChild("article_id").equalTo(articleKey)
+        val commentOptions = FirebaseRecyclerOptions.Builder<Comment>()
+            .setQuery(query, Comment::class.java).build()
+        adapter = AppealArticleCommentAdapter(commentOptions, user!!.uid, this)
+
+        commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
+        adapter.OnItemClickListener = object : AppealArticleCommentAdapter.onItemClickListener {
+            override fun onItemClicked(position: Int) {
+                val comment = adapter.getItem(position)
+                commentLikeDBReference.child(comment.comment_id+user!!.uid).get().addOnSuccessListener {
+                    if (it.exists()) {
+                        commentLikeDBReference.child(comment.comment_id+user!!.uid).removeValue()
+                        comment.liked_user_number = comment.liked_user_number - 1
+                    } else {
+                        commentLikeDBReference.child(comment.comment_id+user!!.uid).setValue(
+                            LikedComment(
+                                comment.comment_id,
+                                user!!.uid,
+                                comment.comment_id + user!!.uid
+                            )
+                        )
+                        comment.liked_user_number = comment.liked_user_number + 1
+                    }
+                    commentDBReference.child(comment.comment_id).setValue(comment)
+                }
+            }
+        }
+        binding.rvAppealArticleComment.adapter = adapter
+        adapter.startListening()
 
         binding.ivAppealArticleBack.setOnClickListener {
             finish()
