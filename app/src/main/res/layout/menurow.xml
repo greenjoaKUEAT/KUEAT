@@ -15,6 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="음식이름"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:ems="10"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="@color/black"
@@ -23,9 +26,12 @@
             android:id="@+id/context"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:ems="20"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:text="음식정보"
             android:textSize="10sp"
-            android:textStyle="bold"
             android:textColor="@color/black"
             />
     </LinearLayout>
@@ -39,8 +45,10 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:ellipsize="end"
             android:textSize="25sp"
-            android:text="가격"
+            android:text=""
             android:textColor="@color/black"
             />
     </LinearLayout>
