@@ -187,7 +187,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             scrollUser = false
             when (tab?.position) {
                 0 -> {
-                    binding!!.scrollView.scrollToView(binding!!.textRest)
+                    binding!!.scrollView.scrollToView(binding!!.imageLayout)
                 }
                 1 -> {
                     binding!!.scrollView.scrollToView(binding!!.textMenu)
@@ -220,7 +220,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
        // scroll 이동 시 tab 전환 구현
         if(scrollUser) {
             tabUser = false
-            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textRest).top) {
+            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.imageLayout).top) {
                 binding!!.tablayout.selectTab(tab1)
             }
             if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textMenu).top) {

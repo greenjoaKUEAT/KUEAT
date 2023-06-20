@@ -109,6 +109,8 @@ class ReviewFragment : Fragment() {
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
             commentAdapter.stopListening()
+            Log.d("reviewFragment","ff")
+
             val currentTime = Calendar.getInstance().time
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
