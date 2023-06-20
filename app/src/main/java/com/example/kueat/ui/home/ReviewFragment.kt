@@ -1,11 +1,13 @@
 package com.example.kueat.ui.home
 
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
@@ -113,10 +115,6 @@ class ReviewFragment : Fragment() {
                 tvAppealArticleLike.text = map.get("liked_user_number").toString()
                 tvAppealArticleComment.text = map.get("comment_number").toString()
                 val userDBReference = Firebase.database.getReference("KueatDB/User")
-//                userDBReference.child(map.get("user_id").toString()).get().addOnSuccessListener {
-//                    val tmp = it.getValue() as HashMap<String, Any>
-//                    userName.text = tmp.get("nickname").toString()
-//                }
                 userDBReference.child(map.get("user_id").toString()).get().addOnCompleteListener{task->
                     if(task.isSuccessful){
                         val tmp = it.value as HashMap<String, Any>
@@ -130,11 +128,6 @@ class ReviewFragment : Fragment() {
                 reviewDate.text = map.get("date").toString()
             }
         }
-//        dbComment = Firebase.database.getReference("KueatDB/Comment")
-//        var query = dbComment.orderByChild("article_id").equalTo(review_id)
-//        val option = FirebaseRecyclerOptions.Builder<Comment>()
-//            .setQuery(query, Comment::class.java).build()
-//        commentAdapter = MyCommentAdapter(option)
         //게시글 좋아요
         restaurantLikeDBReference = Firebase.database.getReference("KueatDB/LikedArticle")
         restaurantLikeDBReference.child(review_id + user!!.uid).get().addOnSuccessListener {
@@ -162,15 +155,25 @@ class ReviewFragment : Fragment() {
             dbReview.child(review_id).child("liked_user_number").setValue(binding!!.tvAppealArticleLike.text.toString().toInt())
         }
 
-//        layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
-            //commentAdapter.stopListening()
+            if(!user.isEmailVerified){
+                Toast.makeText(requireContext(), "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                binding!!.commentEdit.text.clear()
+                return@setOnClickListener
+            }
             Log.d("reviewFragment","ff")
 
             val currentTime = Calendar.getInstance().time
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
             val key = dbComment.push().key
+
+            if(TextUtils.isEmpty(binding!!.commentEdit.text.toString().trim())){
+                Toast.makeText(requireContext(), "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                binding!!.commentEdit.text.clear()
+                return@setOnClickListener
+            }
+
             val item = Comment(key!!,user!!.uid,review_id,binding!!.commentEdit.text.toString(),
             0,0,current, mutableMapOf())
             dbComment.child(key!!).setValue(item)
@@ -181,49 +184,10 @@ class ReviewFragment : Fragment() {
                 num +=1
                 dbReview.child(review_id.toString()).child("comment_number").setValue(num)
                 binding!!.tvAppealArticleComment.text = num.toString()
-                //commentAdapter.startListening()
             }
 
             binding!!.commentEdit.text.clear()
         }
-        // 댓글 좋아요
-//        commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
-//        commentAdapter.itemClickListener= object : MyCommentAdapter.OnItemClickListener{
-//            override fun OnItemClick(pos: Int) {
-//                val c = commentAdapter.getItem(pos)
-//                dbComment.child(c.comment_id).runTransaction(object : Transaction.Handler {
-//                    override fun doTransaction(currentData: MutableData): Transaction.Result {
-//                        val p = currentData.getValue(Comment::class.java)
-//                        Log.d("qwerty123", p.toString())
-//
-//                        if (p!!.liked_user.containsKey(user!!.uid)) {
-//                            p!!.liked_user_number = p!!.liked_user_number - 1
-//                            p!!.liked_user.remove(user!!.uid)
-//                        } else {
-//                            p!!.liked_user_number = p!!.liked_user_number + 1
-//                            p!!.liked_user[user!!.uid] = true
-//                        }
-//
-//                        currentData.value = p
-//                        Log.d("qwerty123", currentData.value.toString())
-//                        return Transaction.success(currentData)
-//                    }
-//
-//                    override fun onComplete(
-//                        error: DatabaseError?,
-//                        committed: Boolean,
-//                        currentData: DataSnapshot?
-//                    ) {
-//                        Log.d("qwerty123", error.toString())
-//                    }
-//                })
-//            }
-//        }
-
-
-
-//        binding!!.commentrecyclerView.layoutManager = layoutManager
-//        binding!!.commentrecyclerView.adapter = commentAdapter
     }
     override fun onStart() {
         super.onStart()

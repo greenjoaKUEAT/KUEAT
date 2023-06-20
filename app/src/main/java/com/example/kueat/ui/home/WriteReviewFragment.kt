@@ -1,10 +1,12 @@
 package com.example.kueat.ui.home
 
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.databinding.FragmentWriteReviewBinding
@@ -13,6 +15,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import org.w3c.dom.Text
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -48,6 +51,14 @@ class WriteReviewFragment : Fragment() {
                     val dataFormat = SimpleDateFormat("MM/dd HH:mm")
                     val current = dataFormat.format(currentTime)
                     val key = dbReview.push().key
+
+                    if(TextUtils.isEmpty(context.text.toString().trim()) || TextUtils.isEmpty(title.text.toString().trim())){
+                        Toast.makeText(requireContext(), "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                        context.text.clear()
+                        title.text.clear()
+                        return@setOnClickListener
+                    }
+
                     val item = Article(key!!, user!!.uid, rest_id, 0, title.text.toString()
                         , context.text.toString(), 0, 0, current)
                     dbReview.child(key!!).setValue(item).addOnSuccessListener {

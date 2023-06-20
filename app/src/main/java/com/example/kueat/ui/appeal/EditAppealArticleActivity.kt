@@ -2,6 +2,8 @@ package com.example.kueat.ui.appeal
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
+import android.widget.Toast
 import com.example.kueat.R
 import com.example.kueat.databinding.ActivityEditAppealArticleBinding
 import com.example.kueat.`object`.Article
@@ -36,6 +38,12 @@ class EditAppealArticleActivity : AppCompatActivity() {
             val current = dataFormat.format(currentTime)
             val title = binding.tvEditAppealArticleTitle
             val content = binding.tvEditAppealArticleContent
+            if(TextUtils.isEmpty(title.text.toString().trim()) || TextUtils.isEmpty(content.text.toString().trim())){
+                Toast.makeText(this, "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                title.text.clear()
+                content.text.clear()
+                return@setOnClickListener
+            }
             val key = articleDBReference.push().key
             val article = Article(
                 key!!,

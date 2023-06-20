@@ -10,6 +10,7 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ScrollView
+import android.widget.Toast
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -122,6 +123,10 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         /*리뷰*/
         binding!!.apply {
             addReview.setOnClickListener {
+                if(!user.isEmailVerified){
+                    Toast.makeText(requireContext(), "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
                 val bundle  = Bundle()
                 bundle.putString("rest_id",rest_id.toString())
                 val reviewWriteFragment = WriteReviewFragment()

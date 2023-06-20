@@ -3,7 +3,9 @@ package com.example.kueat.ui.appeal
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
@@ -120,10 +122,20 @@ class AppealArticleDetailActivity : AppCompatActivity() {
 
         //댓글
         binding.ivAppealArticleDetailCommentButton.setOnClickListener {
+            if(!user!!.isEmailVerified){
+                Toast.makeText(this, "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                binding.etAppealArticleDetailComment.text.clear()
+                return@setOnClickListener
+            }
             val key = commentDBReference.push().key
             val currentTime = System.currentTimeMillis()
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
+            if(TextUtils.isEmpty(binding.etAppealArticleDetailComment.text.toString().trim())){
+                Toast.makeText(this, "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                binding.etAppealArticleDetailComment.text.clear()
+                return@setOnClickListener
+            }
             val comment = Comment(
                 key!!,
                 user!!.uid,

@@ -6,11 +6,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.databinding.FragmentAppealBinding
 import com.example.kueat.`object`.Article
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -19,6 +21,7 @@ class AppealFragment : Fragment() {
     lateinit var binding: FragmentAppealBinding
     lateinit var adapter: AppealArticleAdapter
     lateinit var articleDbReference: DatabaseReference
+    var user = Firebase.auth.currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +52,10 @@ class AppealFragment : Fragment() {
         binding.rvAppealArticle.adapter = adapter
 
         binding.llAddAppealArticleButton.setOnClickListener {
+            if(!user!!.isEmailVerified){
+                Toast.makeText(requireContext(), "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
             val i =  Intent(requireContext(), EditAppealArticleActivity::class.java)
             requireActivity().startActivity(i)
         }
