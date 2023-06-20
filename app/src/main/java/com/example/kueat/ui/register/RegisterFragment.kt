@@ -186,13 +186,13 @@ class RegisterFragment : Fragment() {
             valid = false
         }
 
-        val name = binding.nameInputText.text.toString()
+        val name = binding.nameInputText.text.toString().trim()
         if (TextUtils.isEmpty(name)||!namePattern.matches(name)) {
             binding.nameInputText.hint = "1~20자 사이로 입력해주세요."
             valid = false
         }
 
-        val nickname = binding.nicknameInputText.text.toString()
+        val nickname = binding.nicknameInputText.text.toString().trim()
         if (TextUtils.isEmpty(nickname)||!nicknamePattern.matches(nickname)) {
             binding.nicknameInputText.hint = "1~15자 사이로 입력해주세요."
             valid = false

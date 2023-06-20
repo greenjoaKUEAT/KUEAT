@@ -76,11 +76,12 @@ class EditNicknameFragment : Fragment() {
                 inputManager.hideSoftInputFromWindow(view.windowToken, 0);
 
                 user = Firebase.auth.currentUser!!
-                val newNickname = nicknameInputText.text.toString()
+                val newNickname = nicknameInputText.text.toString().trim()
                 val nicknamePattern = Regex("""^.{1,15}${'$'}""")
 
                 if (TextUtils.isEmpty(newNickname)||!nicknamePattern.matches(newNickname)) {
                     hideProgressBar()
+                    binding.nicknameInputText.text.clear()
                     binding.nicknameInputText.hint = "1~15자 사이로 입력해주세요."
                 }else {
                     var valid = true
