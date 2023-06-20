@@ -52,6 +52,7 @@ class WriteReviewFragment : Fragment() {
                         , context.text.toString(), 0, 0, current)
                     dbReview.child(key!!).setValue(item).addOnSuccessListener {
                         write = 1
+                        @Suppress("DEPRECATION")
                         activity?.onBackPressed()
                         dbRest.child(rest_id.toString())
                             .get().addOnSuccessListener {
@@ -66,6 +67,7 @@ class WriteReviewFragment : Fragment() {
 
             }
             ivEditAppealArticleBack.setOnClickListener {
+                @Suppress("DEPRECATION")
                 activity?.onBackPressed()
             }
         }
