@@ -130,6 +130,7 @@ class LikeFragment : Fragment() {
                                 val resTagType = data.child("tag_type").value as String
                                 val resLoclatitude = data.child("latitude").value as String
                                 val resLoclongitude = data.child("longitude").value as String
+                                val resSignature = data.child("signature").value as String
                                 for (like in likeArr) {
                                     if (resid==like) {
                                         Log.e(
@@ -137,7 +138,7 @@ class LikeFragment : Fragment() {
                                             "ValueEventListener-onDataChange : ${resid}&$like",
                                         )
                                         Log.e(TAG, "${resName}")
-                                        restaurantArr.add(Restaurant(resArticle,resLoclatitude,resLoclongitude,resName,resPhoto,resRating,resid,resTagLoc,resTagType))
+                                        restaurantArr.add(Restaurant(resArticle,resLoclatitude,resLoclongitude,resName,resPhoto,resRating,resid,resTagLoc,resTagType,resSignature))
                                     }
                                 }
                             }

@@ -20,6 +20,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kueat.InitActivity
 import com.example.kueat.MainActivity
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentHomeBinding
@@ -86,8 +87,24 @@ class HomeFragment : Fragment() {
 
 //        showProgressBar()
         init()
-
+        initBtn()
     }
+
+    private fun initBtn() {
+        binding.apply{
+            fragmentHomeLocation.setOnClickListener {
+                val intent = Intent(activity,InitActivity::class.java)
+                intent.putExtra("mode","loc")
+                startActivity(intent)
+            }
+            fragmentHomeMenu.setOnClickListener {
+                val intent = Intent(activity,InitActivity::class.java)
+                intent.putExtra("mode","menu")
+                startActivity(intent)
+            }
+        }
+    }
+
     private fun showProgressBar() {
         binding.progressBar.visibility = View.VISIBLE
     }

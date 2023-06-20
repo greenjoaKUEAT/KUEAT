@@ -107,11 +107,12 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
             textRestaurantName.text = model.name
             textTag.text = "#${model.tag_location} #${model.tag_type}"
             textRate.text = model.rating
+            textSignature.text = model.signature
+            textEnd.visibility = View.VISIBLE
             mainscope.launch {
                 val restaurantLocation = LatLng(model.latitude.toDouble(), model.longitude.toDouble()) // 식당 위치 정보
                 restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
-                textSignature.text = "${getRepMenu(model.restaurant_id).await()}"
-                textEnd.visibility = View.VISIBLE
+
             }
         }
     }
