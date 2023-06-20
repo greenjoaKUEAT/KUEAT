@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.`object`.Comment
@@ -26,6 +27,7 @@ import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -64,6 +66,12 @@ class ReviewFragment : Fragment() {
                 tvAppealArticleDescription.text = map.get("content").toString()
                 tvAppealArticleLike.text = map.get("liked_user_number").toString()
                 tvAppealArticleComment.text = map.get("comment_number").toString()
+                val userDBReference = Firebase.database.getReference("KueatDB/User")
+                userDBReference.child(map.get("user_id").toString()).get().addOnSuccessListener {
+                    val tmp = it.getValue() as HashMap<String, Any>
+                    userName.text = tmp.get("nickname").toString()
+                }
+                reviewDate.text = map.get("date").toString()
             }
         }
         dbComment = Firebase.database.getReference("KueatDB/Comment")
@@ -100,7 +108,9 @@ class ReviewFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
-            commentAdapter.stopListening()
+            //commentAdapter.stopListening()
+            Log.d("reviewFragment","ff")
+
             val currentTime = Calendar.getInstance().time
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
@@ -115,7 +125,7 @@ class ReviewFragment : Fragment() {
                 num +=1
                 dbReview.child(review_id.toString()).child("comment_number").setValue(num)
                 binding!!.tvAppealArticleComment.text = num.toString()
-                commentAdapter.startListening()
+                //commentAdapter.startListening()
             }
 
             binding!!.commentEdit.text.clear()

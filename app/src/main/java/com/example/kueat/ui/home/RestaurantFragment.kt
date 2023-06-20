@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.ScrollView
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.bumptech.glide.Glide.init
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentRestaurantBinding
@@ -25,6 +26,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.NonDisposableHandle.parent
 import kotlin.math.abs
 
@@ -70,6 +72,18 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         dbRest.child(rest_id.toString()).get().addOnSuccessListener {
             val map = it.getValue() as HashMap<String,Any>
             binding!!.textRest.text = map.get("name").toString()
+            val photo = map.get("photo").toString()
+            var firebaseStorage = FirebaseStorage.getInstance()
+            Log.d("qwerty123", firebaseStorage.toString())
+            var firebaseStorageRef = firebaseStorage.getReference(photo)
+            Log.d("qwerty123", firebaseStorageRef.toString())
+            var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(requireContext()).load(it).into(binding!!.img1)
+                Glide.with(requireContext()).load(it).into(binding!!.img2)
+                Glide.with(requireContext()).load(it).into(binding!!.img3)
+                Glide.with(requireContext()).load(it).into(binding!!.img4)
+                Log.d("qwerty123", it.toString());
+            }
         }
 
 //        val fragment = childFragmentManager.beginTransaction()
@@ -173,7 +187,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             scrollUser = false
             when (tab?.position) {
                 0 -> {
-                    binding!!.scrollView.scrollToView(binding!!.textRest)
+                    binding!!.scrollView.scrollToView(binding!!.imageLayout)
                 }
                 1 -> {
                     binding!!.scrollView.scrollToView(binding!!.textMenu)
@@ -206,7 +220,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
        // scroll 이동 시 tab 전환 구현
         if(scrollUser) {
             tabUser = false
-            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textRest).top) {
+            if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.imageLayout).top) {
                 binding!!.tablayout.selectTab(tab1)
             }
             if (calculateRectOnScreen(binding!!.scrollView).top >= calculateRectOnScreen(binding!!.textMenu).top) {
