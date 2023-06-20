@@ -64,7 +64,7 @@ class ReviewFragment : Fragment() {
         binding!!.enter.setOnClickListener {
             commentAdapter.stopListening()
             val currentTime = Calendar.getInstance().time
-            val dataFormat = SimpleDateFormat("MM/dd HH:MM")
+            val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
             val key = dbComment.push().key
             val item = Comment(key!!,user!!.uid,review_id,binding!!.commentEdit.text.toString(),
