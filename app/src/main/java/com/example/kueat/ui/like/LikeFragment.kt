@@ -1,5 +1,6 @@
 package com.example.kueat.ui.like
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import com.example.kueat.databinding.FragmentLikeBinding
 import com.example.kueat.`object`.Restaurant
 import com.example.kueat.`object`.location
 import com.example.kueat.ui.home.HomeFragment
+import com.example.kueat.ui.home.RestaruantActivity
 import com.example.kueat.ui.home.RestaurantFragment
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -27,8 +29,6 @@ import kotlinx.coroutines.withContext
 
 
 class LikeFragment : Fragment() {
-
-
 
     lateinit var binding: FragmentLikeBinding
     var likeArr:ArrayList<Long> = arrayListOf()
@@ -83,12 +83,17 @@ class LikeFragment : Fragment() {
         likeAdapter.itemClickListener=object:MyLikeAdapter.OnItemClickListener{
             override fun onItemClick(holder: MyLikeAdapter.ViewHolder, position: Int) {
                 binding.apply {
+                    val intent = Intent(activity,RestaruantActivity::class.java)
+                    intent.putExtra("rest_id",likeAdapter.items[position].restaurant_id)
+                    startActivity(intent)
+                    /*
                     val bundle = Bundle()
                     bundle.putLong("restaurant",likeAdapter.items[position].restaurant_id)
                     val restaurantFragment = RestaurantFragment()
                     restaurantFragment.arguments = bundle
                     (activity as MainActivity).changeBottomIconHome()
                     requireActivity().supportFragmentManager.beginTransaction().replace(R.id.main_frm, restaurantFragment).commit()
+                    */
                 }
             }
         }
