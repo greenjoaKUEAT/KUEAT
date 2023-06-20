@@ -53,6 +53,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        rest_id = arguments?.getString("rest_id")!!.toInt()
         binding = FragmentRestaurantBinding.inflate(inflater, container, false)
         return binding!!.root
     }
@@ -76,7 +77,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         val bundle  = Bundle()
         bundle.putString("rest_id",rest_id.toString())
         naverfragment.arguments = bundle
-        parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.map_frame,naverfragment).commit()
+        parentFragmentManager.beginTransaction().replace(R.id.map_frame,naverfragment).commit()
 
         dbULike = Firebase.database.getReference("KueatDB/LikedRestaurant")
         val key = rest_id.toString() + user!!.uid
@@ -111,7 +112,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                 bundle.putString("rest_id",rest_id.toString())
                 val reviewWriteFragment = WriteReviewFragment()
                 reviewWriteFragment.arguments = bundle
-                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.main_frm,reviewWriteFragment).commit()
+                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.rest_frm,reviewWriteFragment).commit()
             }
         }
 
@@ -140,7 +141,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
                 bundle.putString("review_id",reviewadapter.getItem(pos).article_id.toString())
                 val reviewFragment = ReviewFragment()
                 reviewFragment.arguments = bundle
-                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.main_frm,reviewFragment).commit()
+                parentFragmentManager.beginTransaction().addToBackStack(null).replace(R.id.rest_frm,reviewFragment).commit()
             }
         }
         binding!!.menurecyclerView.layoutManager = MenulayoutManager

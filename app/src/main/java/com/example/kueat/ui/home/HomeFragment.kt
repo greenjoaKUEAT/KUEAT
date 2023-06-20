@@ -1,6 +1,7 @@
 package com.example.kueat.ui.home
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
@@ -133,22 +134,16 @@ class HomeFragment : Fragment() {
         adapter = MyRestaurantAdapter(option,requireActivity())
         adapter.itemClickListener = object : MyRestaurantAdapter.OnItemClickListener {
             override fun OnItemClick(position: Int, model: Restaurant) {
-                val bundle = Bundle()
+                val intent = Intent(activity,RestaruantActivity::class.java)
+                intent.putExtra("rest_id",model.restaurant_id)
+                startActivity(intent)
+                /*val bundle = Bundle()
                 bundle.putLong("restaurant", model.restaurant_id)
                 val restaurantFragment = RestaurantFragment()
                 restaurantFragment.arguments = bundle
 //            (activity as MainActivity).changeBottomIconHome()
                 requireActivity().supportFragmentManager.beginTransaction()
-                    .replace(R.id.main_frm, restaurantFragment).commit()
-                /* 송현이형 프래그먼트 이름 알아낸 후 전환해주기
-            val bundle = Bundle() // 번들을 통해 값 전달
-            bundle.putInt("RestaurantID", model.restaurant_id) //번들에 넘길 값 저장
-            val transaction: FragmentTransaction = requireActivity().supportFragmentManager.beginTransaction()
-            val fragment2 = RestaurantDetailFragment() //프래그먼트2 선언
-            fragment2.setArguments(bundle) //번들을 프래그먼트2로 보낼 준비
-            transaction.replace(com.example.kueat.R.id.init_frm, fragment2)
-            transaction.commit()
-             */
+                    .replace(R.id.main_frm, restaurantFragment).commit()*/
             }
         }
 

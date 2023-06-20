@@ -43,7 +43,7 @@ class WriteReviewFragment : Fragment() {
                 if(write == 1) {
                     write = 0
                     val currentTime = Calendar.getInstance().time
-                    val dataFormat = SimpleDateFormat("MM/dd HH:MM")
+                    val dataFormat = SimpleDateFormat("MM/dd HH:mm")
                     val current = dataFormat.format(currentTime)
                     val key = dbReview.push().key
                     val item = Article(key!!, user!!.uid, rest_id, 0, title.text.toString()
