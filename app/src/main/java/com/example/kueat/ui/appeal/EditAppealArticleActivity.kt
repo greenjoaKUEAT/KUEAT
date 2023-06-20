@@ -39,7 +39,7 @@ class EditAppealArticleActivity : AppCompatActivity() {
             val title = binding.tvEditAppealArticleTitle
             val content = binding.tvEditAppealArticleContent
             if(TextUtils.isEmpty(title.text.toString().trim()) || TextUtils.isEmpty(content.text.toString().trim())){
-                Toast.makeText(this, "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "공백이 아닌 제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 title.text.clear()
                 content.text.clear()
                 return@setOnClickListener

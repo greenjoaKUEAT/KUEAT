@@ -124,7 +124,7 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
         binding!!.apply {
             addReview.setOnClickListener {
                 if(!user.isEmailVerified){
-                    Toast.makeText(requireContext(), "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "리뷰를 작성하려면 학교인증이 필요합니다", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
                 val bundle  = Bundle()

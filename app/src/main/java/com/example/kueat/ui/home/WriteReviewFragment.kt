@@ -53,9 +53,10 @@ class WriteReviewFragment : Fragment() {
                     val key = dbReview.push().key
 
                     if(TextUtils.isEmpty(context.text.toString().trim()) || TextUtils.isEmpty(title.text.toString().trim())){
-                        Toast.makeText(requireContext(), "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "공백이 아닌 제목과 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                         context.text.clear()
                         title.text.clear()
+                        write=1
                         return@setOnClickListener
                     }
 

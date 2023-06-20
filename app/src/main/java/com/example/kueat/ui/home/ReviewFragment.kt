@@ -157,7 +157,7 @@ class ReviewFragment : Fragment() {
 
         binding!!.enter.setOnClickListener {
             if(!user.isEmailVerified){
-                Toast.makeText(requireContext(), "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "댓글 작성을 작성하려면 학교인증이 필요합니다", Toast.LENGTH_SHORT).show()
                 binding!!.commentEdit.text.clear()
                 return@setOnClickListener
             }
@@ -169,7 +169,7 @@ class ReviewFragment : Fragment() {
             val key = dbComment.push().key
 
             if(TextUtils.isEmpty(binding!!.commentEdit.text.toString().trim())){
-                Toast.makeText(requireContext(), "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "공백이 아닌 댓글 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 binding!!.commentEdit.text.clear()
                 return@setOnClickListener
             }

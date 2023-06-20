@@ -123,7 +123,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
         //댓글
         binding.ivAppealArticleDetailCommentButton.setOnClickListener {
             if(!user!!.isEmailVerified){
-                Toast.makeText(this, "학교인증을 하세요", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "댓글을 작성하려면 학교인증이 필요합니다", Toast.LENGTH_SHORT).show()
                 binding.etAppealArticleDetailComment.text.clear()
                 return@setOnClickListener
             }
@@ -132,7 +132,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
             if(TextUtils.isEmpty(binding.etAppealArticleDetailComment.text.toString().trim())){
-                Toast.makeText(this, "공백이라 안됨", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "공백이 아닌 댓글 내용을 입력해주세요", Toast.LENGTH_SHORT).show()
                 binding.etAppealArticleDetailComment.text.clear()
                 return@setOnClickListener
             }
