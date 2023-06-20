@@ -18,7 +18,6 @@ import com.google.firebase.ktx.Firebase
 class StartActivity : AppCompatActivity() {
     lateinit var binding:ActivityStartBinding
     private lateinit var auth: FirebaseAuth
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityStartBinding.inflate(layoutInflater)
@@ -28,18 +27,19 @@ class StartActivity : AppCompatActivity() {
         val callback = onBackPressedDispatcher.addCallback(this) {
             backPressed()
         }
-        checkLocationPermission()
         initBtn()
+        checkLocationPermission()
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if (currentUser != null) {
-            reload()
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        if(allPermissionGranted()) {
+//
+//        }else{
+//            checkLocationPermission()
+//        }
+//    }
 
     //로그인 된 유저이면 InitActivity의 FilterLocFragment로 화면전환
     private fun reload() {
@@ -89,6 +89,10 @@ class StartActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
             -> {
 //                Toast.makeText(this,"권한이 승인되었습니다.",Toast.LENGTH_SHORT).show()
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    reload()
+                }
             }
 
             ActivityCompat.shouldShowRequestPermissionRationale(this,android.Manifest.permission.ACCESS_FINE_LOCATION)||
@@ -97,6 +101,7 @@ class StartActivity : AppCompatActivity() {
         }
 
             else -> {
+
                 multiplePermissionLauncher.launch(permissions)
             }
         }
