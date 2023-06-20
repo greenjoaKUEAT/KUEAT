@@ -78,6 +78,10 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LikerowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -96,7 +100,7 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
             var firebaseStorageRef = firebaseStorage.getReference(model.photo)
             Log.d("qwerty123", model.photo.toString())
             var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
-                Glide.with(activity.applicationContext).load(it).into(restaurantImage)
+                Glide.with(activity.applicationContext).load(it).dontAnimate().into(restaurantImage)
                 Log.d("qwerty123", it.toString())
             }
 
