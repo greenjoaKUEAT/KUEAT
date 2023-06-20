@@ -12,17 +12,17 @@ import com.google.firebase.ktx.Firebase
 
 class MyCommentAdapter(options: FirebaseRecyclerOptions<Comment>)
     : FirebaseRecyclerAdapter<Comment, MyCommentAdapter.ViewHolder>(options) {
-//    interface OnItemClickListener {
-//        fun OnItemClick(pos: Int)
-//    }
-   // var itemClickListener: OnItemClickListener? = null
+    interface OnItemClickListener {
+        fun OnItemClick(pos: Int)
+    }
+    var itemClickListener: OnItemClickListener? = null
 
 
     inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) : RecyclerView.ViewHolder(binding.root) {
         init {
-//            binding.root.setOnClickListener {
-//                itemClickListener!!.OnItemClick(bindingAdapterPosition)
-//            }
+            binding.ivAppealArticleCommentLikedUser.setOnClickListener {
+                itemClickListener!!.OnItemClick(bindingAdapterPosition)
+            }
         }
     }
 
