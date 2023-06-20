@@ -74,14 +74,12 @@ class RestaurantFragment : Fragment(),TabLayout.OnTabSelectedListener,View.OnScr
             binding!!.textRest.text = map.get("name").toString()
             val photo = map.get("photo").toString()
             var firebaseStorage = FirebaseStorage.getInstance()
-            Log.d("qwerty123", firebaseStorage.toString())
             var firebaseStorageRef = firebaseStorage.getReference(photo)
-            Log.d("qwerty123", firebaseStorageRef.toString())
             var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
-                Glide.with(requireContext()).load(it).into(binding!!.img1)
-                Glide.with(requireContext()).load(it).into(binding!!.img2)
-                Glide.with(requireContext()).load(it).into(binding!!.img3)
-                Glide.with(requireContext()).load(it).into(binding!!.img4)
+                Glide.with(requireContext()).load(it).dontAnimate().into(binding!!.img1)
+                Glide.with(requireContext()).load(it).dontAnimate().into(binding!!.img2)
+                Glide.with(requireContext()).load(it).dontAnimate().into(binding!!.img3)
+                Glide.with(requireContext()).load(it).dontAnimate().into(binding!!.img4)
                 Log.d("qwerty123", it.toString());
             }
         }

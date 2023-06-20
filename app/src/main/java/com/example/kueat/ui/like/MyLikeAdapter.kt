@@ -112,10 +112,10 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val c
             mainscope.launch {
                 var firebaseStorage = FirebaseStorage.getInstance()
                 Log.d("qwerty123", firebaseStorage.toString());
-                var firebaseStorageRef = firebaseStorage.getReference("alchon.jpg")
+                var firebaseStorageRef = firebaseStorage.getReference(items[position].photo)
                 Log.d("qwerty123", firebaseStorageRef.toString());
                 var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
-                    Glide.with(context).load(it).into(restaurantImage)
+                    Glide.with(context).load(it).dontAnimate().into(restaurantImage)
                     Log.d("qwerty123", it.toString());
                 }
                 val restaurantLocation = LatLng(items[position].latitude.toDouble(), items[position].longitude.toDouble()) // 식당 위치 정보
