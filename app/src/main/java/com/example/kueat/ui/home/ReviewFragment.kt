@@ -67,9 +67,19 @@ class ReviewFragment : Fragment() {
                 tvAppealArticleLike.text = map.get("liked_user_number").toString()
                 tvAppealArticleComment.text = map.get("comment_number").toString()
                 val userDBReference = Firebase.database.getReference("KueatDB/User")
-                userDBReference.child(map.get("user_id").toString()).get().addOnSuccessListener {
-                    val tmp = it.getValue() as HashMap<String, Any>
-                    userName.text = tmp.get("nickname").toString()
+//                userDBReference.child(map.get("user_id").toString()).get().addOnSuccessListener {
+//                    val tmp = it.getValue() as HashMap<String, Any>
+//                    userName.text = tmp.get("nickname").toString()
+//                }
+                userDBReference.child(map.get("user_id").toString()).get().addOnCompleteListener{task->
+                    if(task.isSuccessful){
+                        val tmp = it.value as HashMap<String, Any>
+                        val nickname = tmp["nickname"].toString()
+                        if(nickname != "null")
+                            userName.text = tmp["nickname"].toString()
+                        else
+                            userName.text = "(알 수 없음)"
+                    }
                 }
                 reviewDate.text = map.get("date").toString()
             }
