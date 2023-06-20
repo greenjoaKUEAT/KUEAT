@@ -81,9 +81,9 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                     var usr_nickname = it.result.child("nickname").getValue().toString()
                     Log.d("check",usr_nickname)
                     if(usr_nickname!="null")
-                        binding.tvAppealArticleDetailProfileName.text  = usr_nickname
+                        binding.tvAppealArticleDetailProfileName.text = usr_nickname
                     else
-                        binding.tvAppealArticleDetailProfileName.text  = "(알 수 없음)"
+                        binding.tvAppealArticleDetailProfileName.text = "(알 수 없음)"
                 }
             }
         }
