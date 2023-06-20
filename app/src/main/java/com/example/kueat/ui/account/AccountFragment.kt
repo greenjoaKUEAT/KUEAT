@@ -85,13 +85,6 @@ class AccountFragment : Fragment() {
             textOut.setOnClickListener{
                 outAlertDlg()
             }
-            testRest.setOnClickListener {
-                val fragment
-                        = requireActivity().supportFragmentManager.beginTransaction()
-                val restFragment = RestaurantFragment()
-                fragment.replace(R.id.main_frm,restFragment)
-                fragment.commit()
-            }
         }
     }
 
