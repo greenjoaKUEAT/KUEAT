@@ -2,6 +2,7 @@ package com.example.kueat.ui.appeal
 
 import android.content.Context
 import android.content.res.ColorStateList
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.compose.ui.graphics.Color
@@ -51,9 +52,15 @@ class AppealArticleCommentAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int, model: Comment) {
         val userDBReference = Firebase.database.getReference("KueatDB/User")
-        userDBReference.child(model.user_id).get().addOnSuccessListener {
-            val map = it.getValue() as HashMap<String, Any>
-            holder.binding.tvAppealArticleCommentUser.text = map.get("nickname").toString()
+        userDBReference.child(model.user_id).get().addOnCompleteListener {
+            if(it.isSuccessful){
+                var usr_nickname = it.result.child("nickname").getValue().toString()
+                Log.d("check",usr_nickname)
+                if(usr_nickname!="null")
+                    holder.binding.tvAppealArticleCommentUser.text  = usr_nickname
+                else
+                    holder.binding.tvAppealArticleCommentUser.text  = "(알 수 없음)"
+            }
         }
 
         holder.binding.apply {
