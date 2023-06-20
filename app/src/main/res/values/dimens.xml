@@ -45,4 +45,10 @@
 <!--    fragment_home-->
     <dimen name="home_textsize">18sp</dimen>
     <dimen name="home_tag_textsize">40sp</dimen>
+    <dimen name="home_total_margin_horizontal">20dp</dimen>
+
+<!--    fragment_restaurant-->
+    <dimen name="rest_total_margin">20dp</dimen>
+    <dimen name="rest_subtitle_padding">15dp</dimen>
+    <dimen name="rest_subtitle_margin_left">5dp</dimen>
 </resources>
