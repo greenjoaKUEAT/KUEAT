@@ -58,7 +58,6 @@ class AccountFragment : Fragment() {
         binding = FragmentAccountBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initText()
@@ -68,28 +67,29 @@ class AccountFragment : Fragment() {
     }
 
     private fun initBtn() {
-        binding.apply {
+        binding.apply{
             textSchool.setOnClickListener {
                 sendEmail()
             }
-            textPassword.setOnClickListener {
+            textPassword.setOnClickListener{
                 editPassword()
             }
             textNickname.setOnClickListener {
                 editNickname()
             }
-            textLogout.setOnClickListener {
+            textLogout.setOnClickListener{
                 auth.signOut()
-                Toast.makeText(context, "로그아웃되었습니다.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context,"로그아웃되었습니다.",Toast.LENGTH_SHORT).show()
                 changeStartActivity()
             }
-            textOut.setOnClickListener {
+            textOut.setOnClickListener{
                 outAlertDlg()
             }
             testRest.setOnClickListener {
-                val fragment = requireActivity().supportFragmentManager.beginTransaction()
+                val fragment
+                        = requireActivity().supportFragmentManager.beginTransaction()
                 val restFragment = RestaurantFragment()
-                fragment.replace(R.id.main_frm, restFragment)
+                fragment.replace(R.id.main_frm,restFragment)
                 fragment.commit()
             }
         }
@@ -108,9 +108,9 @@ class AccountFragment : Fragment() {
     private fun sendEmail() {
         user.reload().addOnSuccessListener {
             user = Firebase.auth.currentUser!!
-            if (user.isEmailVerified) {
-                Toast.makeText(context, "인증된 계정입니다.", Toast.LENGTH_SHORT).show()
-            } else {
+            if(user.isEmailVerified){
+                Toast.makeText(context,"인증된 계정입니다.",Toast.LENGTH_SHORT).show()
+            }else {
                 user.sendEmailVerification()
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
@@ -138,14 +138,15 @@ class AccountFragment : Fragment() {
         }
     }
 
-    private fun outAlertDlg() {
+    private fun outAlertDlg(){
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("정말로 회원 탈퇴를 하시겠습니까?")
             .setTitle("회원 탈퇴")
-            .setPositiveButton("아니요") { dlg, _ ->
-                dlg.dismiss()
+            .setPositiveButton("아니요"){
+                    dlg,_->dlg.dismiss()
 
-            }.setNegativeButton("네") { _, _ ->
+            }.setNegativeButton("네"){
+                    _, _->
                 run {
                     deleteUser()
                 }
@@ -162,18 +163,18 @@ class AccountFragment : Fragment() {
                     Log.d(TAG, "User account deleted.")
                     kueatDB = Firebase.database.getReference("KueatDB/User")
                     kueatDB.child(uid).removeValue()
-                    Toast.makeText(context, "회원 탈퇴 성공", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"회원 탈퇴 성공",Toast.LENGTH_SHORT).show()
                     changeStartActivity()
-                } else {
-                    Toast.makeText(context, "다시 로그인 후 이용해주세요.", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    Toast.makeText(context,"다시 로그인 후 이용해주세요.",Toast.LENGTH_SHORT).show()
                     auth.signOut()
                     changeStartActivity()
                 }
             }
     }
-
     private fun changeStartActivity() {
-        val intent = Intent(requireActivity(), StartActivity::class.java)
+        val intent = Intent(requireActivity(),StartActivity::class.java)
         startActivity(intent)
     }
 
