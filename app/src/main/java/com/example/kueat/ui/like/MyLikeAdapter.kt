@@ -107,6 +107,8 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val c
             textRestaurantName.text = items[position].name
             textTag.text = "#${items[position].tag_location} #${items[position].tag_type}"
             textRate.text = items[position].rating
+            textSignature.text = items[position].signature
+            textEnd.visibility = View.VISIBLE
             mainscope.launch {
                 var firebaseStorage = FirebaseStorage.getInstance()
                 Log.d("qwerty123", firebaseStorage.toString());
@@ -118,8 +120,7 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val c
                 }
                 val restaurantLocation = LatLng(items[position].latitude.toDouble(), items[position].longitude.toDouble()) // 식당 위치 정보
                 restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
-                textSignature.text = "${getRepMenu(items[position].restaurant_id).await()}"
-                textEnd.visibility = View.VISIBLE
+
 
             }
 
@@ -166,6 +167,10 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val c
             return@async loc
         }
 
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
     }
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
