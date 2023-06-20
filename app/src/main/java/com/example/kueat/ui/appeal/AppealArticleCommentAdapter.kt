@@ -31,7 +31,7 @@ class AppealArticleCommentAdapter(
     inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
         init {
-            binding.ivAppealArticleCommentLikedUser.setOnClickListener {
+            binding.tvAppealArticleCommentLikedUserButton.setOnClickListener {
                 OnItemClickListener?.onItemClicked(bindingAdapterPosition)
             }
         }
