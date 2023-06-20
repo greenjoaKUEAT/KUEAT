@@ -117,10 +117,9 @@ class ReviewFragment : Fragment() {
                 val userDBReference = Firebase.database.getReference("KueatDB/User")
                 userDBReference.child(map.get("user_id").toString()).get().addOnCompleteListener{task->
                     if(task.isSuccessful){
-                        val tmp = it.value as HashMap<String, Any>
-                        val nickname = tmp["nickname"].toString()
+                        var nickname = task.result.child("nickname").getValue().toString()
                         if(nickname != "null")
-                            userName.text = tmp["nickname"].toString()
+                            userName.text = nickname
                         else
                             userName.text = "(알 수 없음)"
                     }
