@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -103,7 +104,6 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
                 Glide.with(activity.applicationContext).load(it).dontAnimate().into(restaurantImage)
                 Log.d("qwerty123", it.toString())
             }
-
             textRestaurantName.text = model.name
             textTag.text = "#${model.tag_location} #${model.tag_type}"
             textRate.text = model.rating
