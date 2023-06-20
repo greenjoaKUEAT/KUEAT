@@ -32,8 +32,7 @@
             android:background="@drawable/style_restaurant_img_background"
             android:layout_gravity="center_vertical"
             android:clipToOutline="true"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/image_like" />
+            android:scaleType="centerCrop" />
 
         <LinearLayout
             android:layout_width="match_parent"
