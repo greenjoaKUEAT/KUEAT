@@ -6,11 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kueat.R
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.`object`.Comment
+import com.example.kueat.ui.appeal.LikedArticle
 import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.ktx.auth
@@ -26,9 +29,11 @@ class ReviewFragment : Fragment() {
     lateinit var dbComment : DatabaseReference
     lateinit var commentAdapter: MyCommentAdapter
     lateinit var layoutManager: LinearLayoutManager
+    lateinit var restaurantLikeDBReference: DatabaseReference
     var review_id = ""
     val user = Firebase.auth.currentUser
     var num = 0
+    var isLikedArticle = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +64,32 @@ class ReviewFragment : Fragment() {
         val option = FirebaseRecyclerOptions.Builder<Comment>()
             .setQuery(query, Comment::class.java).build()
         commentAdapter = MyCommentAdapter(option)
+        //게시글 좋아요
+        restaurantLikeDBReference = Firebase.database.getReference("KueatDB/LikedArticle")
+        restaurantLikeDBReference.child(review_id + user!!.uid).get().addOnSuccessListener {
+            isLikedArticle = it.exists()
+            if(isLikedArticle)
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.pink))
+        }
+        binding!!.likeImage.setOnClickListener {
+            if (isLikedArticle) {
+                restaurantLikeDBReference.child(review_id + user!!.uid).removeValue()
+                binding!!.tvAppealArticleLike.text =  (binding!!.tvAppealArticleLike.text.toString().toInt()- 1).toString()
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.black))
+            } else {
+                restaurantLikeDBReference.child(review_id + user!!.uid).setValue(
+                    LikedArticle(
+                        review_id,
+                        user!!.uid,
+                        review_id + user!!.uid
+                    )
+                )
+                binding!!.tvAppealArticleLike.text =  (binding!!.tvAppealArticleLike.text.toString().toInt() + 1).toString()
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.pink))
+            }
+            isLikedArticle = !isLikedArticle
+            dbReview.child(review_id).child("liked_user_number").setValue(binding!!.tvAppealArticleLike.text.toString().toInt())
+        }
 
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
@@ -79,6 +110,7 @@ class ReviewFragment : Fragment() {
                 binding!!.tvAppealArticleComment.text = num.toString()
                 commentAdapter.startListening()
             }
+
             binding!!.commentEdit.text.clear()
         }
 
