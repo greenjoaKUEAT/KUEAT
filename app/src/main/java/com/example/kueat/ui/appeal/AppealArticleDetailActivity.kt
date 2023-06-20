@@ -113,7 +113,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
         }
 
         //댓글
-        binding.ivAppealArticleAddCommentButton.setOnClickListener {
+        binding.ivAppealArticleDetailCommentButton.setOnClickListener {
             val key = commentDBReference.push().key
             val currentTime = System.currentTimeMillis()
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
@@ -122,13 +122,13 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 key!!,
                 user!!.uid,
                 article.article_id,
-                binding.etAppealArticleAddCommentText.text.toString(),
-                article.liked_user_number,
+                binding.etAppealArticleDetailComment.text.toString(),
+                0,
                 0,
                 current,
                 mutableMapOf()
             )
-            binding.etAppealArticleAddCommentText.text.clear()
+            binding.etAppealArticleDetailComment.text.clear()
 
             commentDBReference.child(key!!).setValue(comment).addOnSuccessListener {
                 article.comment_number = article.comment_number + 1
