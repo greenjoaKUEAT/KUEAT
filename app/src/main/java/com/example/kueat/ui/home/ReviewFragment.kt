@@ -1,6 +1,7 @@
 package com.example.kueat.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,11 +14,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.kueat.R
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.`object`.Comment
+import com.example.kueat.ui.appeal.AppealArticleCommentAdapter
 import com.example.kueat.ui.appeal.LikedArticle
 import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -30,6 +36,7 @@ class ReviewFragment : Fragment() {
     lateinit var commentAdapter: MyCommentAdapter
     lateinit var layoutManager: LinearLayoutManager
     lateinit var restaurantLikeDBReference: DatabaseReference
+    lateinit var commentLikeDBReference : DatabaseReference
     var review_id = ""
     val user = Firebase.auth.currentUser
     var num = 0
@@ -113,6 +120,41 @@ class ReviewFragment : Fragment() {
 
             binding!!.commentEdit.text.clear()
         }
+        // 댓글 좋아요
+        commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
+        commentAdapter.itemClickListener= object : MyCommentAdapter.OnItemClickListener{
+            override fun OnItemClick(pos: Int) {
+                val c = commentAdapter.getItem(pos)
+                dbComment.child(c.comment_id).runTransaction(object : Transaction.Handler {
+                    override fun doTransaction(currentData: MutableData): Transaction.Result {
+                        val p = currentData.getValue(Comment::class.java)
+                        Log.d("qwerty123", p.toString())
+
+                        if (p!!.liked_user.containsKey(user!!.uid)) {
+                            p!!.liked_user_number = p!!.liked_user_number - 1
+                            p!!.liked_user.remove(user!!.uid)
+                        } else {
+                            p!!.liked_user_number = p!!.liked_user_number + 1
+                            p!!.liked_user[user!!.uid] = true
+                        }
+
+                        currentData.value = p
+                        Log.d("qwerty123", currentData.value.toString())
+                        return Transaction.success(currentData)
+                    }
+
+                    override fun onComplete(
+                        error: DatabaseError?,
+                        committed: Boolean,
+                        currentData: DataSnapshot?
+                    ) {
+                        Log.d("qwerty123", error.toString())
+                    }
+                })
+            }
+        }
+
+
 
         binding!!.commentrecyclerView.layoutManager = layoutManager
         binding!!.commentrecyclerView.adapter = commentAdapter
