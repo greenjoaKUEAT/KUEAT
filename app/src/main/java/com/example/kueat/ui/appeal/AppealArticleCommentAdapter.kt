@@ -15,23 +15,26 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class AppealArticleCommentAdapter(var options: FirebaseRecyclerOptions<Comment>, var uid: String, var context: Context) :
+class AppealArticleCommentAdapter(
+    var options: FirebaseRecyclerOptions<Comment>,
+    var uid: String,
+    var context: Context
+) :
     FirebaseRecyclerAdapter<Comment, AppealArticleCommentAdapter.ViewHolder>(options) {
-
 
     var OnItemClickListener: onItemClickListener? = null
 
-    interface onItemClickListener{
+    interface onItemClickListener {
         fun onItemClicked(position: Int)
     }
 
     inner class ViewHolder(val binding: ItemAppealArticleCommentBinding) :
         RecyclerView.ViewHolder(binding.root) {
-            init {
-                binding.ivAppealArticleCommentLikedUser.setOnClickListener {
-                    OnItemClickListener?.onItemClicked(bindingAdapterPosition)
-                }
+        init {
+            binding.ivAppealArticleCommentLikedUser.setOnClickListener {
+                OnItemClickListener?.onItemClicked(bindingAdapterPosition)
             }
+        }
     }
 
     override fun onCreateViewHolder(
@@ -52,15 +55,24 @@ class AppealArticleCommentAdapter(var options: FirebaseRecyclerOptions<Comment>,
             val map = it.getValue() as HashMap<String, Any>
             holder.binding.tvAppealArticleCommentUser.text = map.get("nickname").toString()
         }
+
         holder.binding.apply {
             tvAppealArticleCommentConetent.text = model.content
             tvAppealArticleCommentDate.text = model.date
-            Firebase.database.getReference("KueatDB/LikedComment").child(model.comment_id+uid).get().addOnSuccessListener {
-                if(it.exists()){
-                    tvAppealArticleCommentLikedUser.setTextColor(ContextCompat.getColor(context, R.color.pink))
-                } else {
-                    tvAppealArticleCommentLikedUser.setTextColor(ContextCompat.getColor(context, R.color.black))
-                }
+            if (model.liked_user.containsKey(uid)) {
+                tvAppealArticleCommentLikedUser.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.pink
+                    )
+                )
+            } else {
+                tvAppealArticleCommentLikedUser.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                )
             }
             tvAppealArticleCommentLikedUser.text = model.liked_user_number.toString()
         }
