@@ -1,9 +1,12 @@
 package com.example.kueat.ui.home
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kueat.R
 import com.example.kueat.databinding.ItemAppealArticleCommentBinding
 import com.example.kueat.`object`.Comment
 import com.firebase.ui.database.FirebaseRecyclerAdapter
@@ -11,7 +14,7 @@ import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
-class MyCommentAdapter(options: FirebaseRecyclerOptions<Comment>)
+class MyCommentAdapter(options: FirebaseRecyclerOptions<Comment>, var uid: String, var context: Context)
     : FirebaseRecyclerAdapter<Comment, MyCommentAdapter.ViewHolder>(options) {
     interface OnItemClickListener {
         fun OnItemClick(pos: Int)
@@ -52,6 +55,21 @@ class MyCommentAdapter(options: FirebaseRecyclerOptions<Comment>)
             // 초기화 작업
             tvAppealArticleCommentConetent.text = model.content.toString()
             tvAppealArticleCommentDate.text = model.date
+            if (model.liked_user.containsKey(uid)) {
+                tvAppealArticleCommentLikedUser.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.pink
+                    )
+                )
+            } else {
+                tvAppealArticleCommentLikedUser.setTextColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.black
+                    )
+                )
+            }
             tvAppealArticleCommentLikedUser.text = model.liked_user_number.toString()
         }
     }

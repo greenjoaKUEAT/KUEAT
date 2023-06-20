@@ -66,7 +66,7 @@ class ReviewFragment : Fragment() {
         var query = dbComment.orderByChild("article_id").equalTo(review_id)
         val option = FirebaseRecyclerOptions.Builder<Comment>()
             .setQuery(query, Comment::class.java).build()
-        commentAdapter = MyCommentAdapter(option)
+        commentAdapter = MyCommentAdapter(option, user!!.uid, requireContext())
 
         commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
         commentAdapter.itemClickListener= object : MyCommentAdapter.OnItemClickListener{
