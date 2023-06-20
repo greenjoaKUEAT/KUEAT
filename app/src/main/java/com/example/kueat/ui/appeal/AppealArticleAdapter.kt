@@ -9,15 +9,17 @@ import com.example.kueat.`object`.Article
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
 
-class AppealArticleAdapter(val options : FirebaseRecyclerOptions<Article>) : FirebaseRecyclerAdapter<Article, AppealArticleAdapter.ViewHolder>(options) {
+class AppealArticleAdapter(val options: FirebaseRecyclerOptions<Article>) :
+    FirebaseRecyclerAdapter<Article, AppealArticleAdapter.ViewHolder>(options) {
 
     var OnItemClickListener: onItemClickListener? = null
 
-    interface onItemClickListener{
+    interface onItemClickListener {
         fun onItemClicked(position: Int)
     }
 
-    inner class ViewHolder(val binding: ItemAppealArticleBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class ViewHolder(val binding: ItemAppealArticleBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         init {
             binding.root.setOnClickListener {
                 OnItemClickListener?.onItemClicked(bindingAdapterPosition)
@@ -25,8 +27,12 @@ class AppealArticleAdapter(val options : FirebaseRecyclerOptions<Article>) : Fir
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AppealArticleAdapter.ViewHolder {
-        val binding = ItemAppealArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AppealArticleAdapter.ViewHolder {
+        val binding =
+            ItemAppealArticleBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
     }
 

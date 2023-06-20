@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +27,8 @@ import kotlinx.coroutines.withContext
 
 
 class LikeFragment : Fragment() {
+
+
 
     lateinit var binding: FragmentLikeBinding
     var likeArr:ArrayList<Long> = arrayListOf()
@@ -76,7 +79,7 @@ class LikeFragment : Fragment() {
 
     private fun initRecycler() {
         binding.recyclerview.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL,false)
-        likeAdapter = MyLikeAdapter(restaurantArr, requireActivity())
+        likeAdapter = MyLikeAdapter(restaurantArr, requireActivity(), requireContext())
         likeAdapter.itemClickListener=object:MyLikeAdapter.OnItemClickListener{
             override fun onItemClick(holder: MyLikeAdapter.ViewHolder, position: Int) {
                 binding.apply {

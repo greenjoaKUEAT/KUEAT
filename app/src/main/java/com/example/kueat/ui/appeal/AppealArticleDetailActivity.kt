@@ -40,6 +40,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
     }
 
     fun initLayout() {
+        //게시글
         val articleKey = intent.getStringExtra("article_key")
         articleDBReference = Firebase.database.getReference("KueatDB/Article/0")
         articleDBReference.child(articleKey!!).get().addOnSuccessListener {
@@ -70,6 +71,7 @@ class AppealArticleDetailActivity : AppCompatActivity() {
             }
         }
 
+        //게시글 좋아요
         restaurantLikeDBReference = Firebase.database.getReference("KueatDB/LikedArticle")
         restaurantLikeDBReference.child(articleKey + user!!.uid).get().addOnSuccessListener {
             isLikedArticle = it.exists()
@@ -99,13 +101,12 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 article.liked_user_number.toString()
         }
 
+        //댓글
         binding.ivAppealArticleAddCommentButton.setOnClickListener {
             val key = commentDBReference.push().key
             val currentTime = System.currentTimeMillis()
-            Log.d("qwerty123" ,currentTime.toString())
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
-            Log.d("qwerty123" ,current)
             val comment = Comment(
                 key!!,
                 user!!.uid,
@@ -131,7 +132,10 @@ class AppealArticleDetailActivity : AppCompatActivity() {
         val commentOptions = FirebaseRecyclerOptions.Builder<Comment>()
             .setQuery(query, Comment::class.java).build()
         adapter = AppealArticleCommentAdapter(commentOptions, user!!.uid, this)
+        binding.rvAppealArticleComment.adapter = adapter
+        adapter.startListening()
 
+        //댓글 좋아요
         commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
         adapter.OnItemClickListener = object : AppealArticleCommentAdapter.onItemClickListener {
             override fun onItemClicked(position: Int) {
@@ -154,8 +158,6 @@ class AppealArticleDetailActivity : AppCompatActivity() {
                 }
             }
         }
-        binding.rvAppealArticleComment.adapter = adapter
-        adapter.startListening()
 
         binding.ivAppealArticleBack.setOnClickListener {
             finish()

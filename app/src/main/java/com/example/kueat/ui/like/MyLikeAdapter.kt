@@ -1,6 +1,7 @@
 package com.example.kueat.ui.like
 
 import android.app.Activity
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Looper
@@ -10,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.kueat.databinding.LikerowBinding
 import com.example.kueat.`object`.Restaurant
 import com.example.kueat.`object`.location
@@ -23,6 +25,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +35,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity)
+class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity,val context: Context)
     : RecyclerView.Adapter<MyLikeAdapter.ViewHolder>(){
     private val mainscope = CoroutineScope(Dispatchers.Main)
     lateinit var dbMenu: DatabaseReference
@@ -109,6 +112,14 @@ class MyLikeAdapter(val items:ArrayList<Restaurant>,val activity: Activity)
                 restaurantDistance.text = "내 위치로부터 ${getDistance(restaurantLocation).await()}m"
                 textSignature.text = "${getRepMenu(items[position].restaurant_id).await()}"
                 textEnd.visibility = View.VISIBLE
+            }
+            var firebaseStorage = FirebaseStorage.getInstance()
+            Log.d("qwerty123", firebaseStorage.toString());
+            var firebaseStorageRef = firebaseStorage.getReference("alchon.jpg")
+            Log.d("qwerty123", firebaseStorageRef.toString());
+            var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(context).load(it).into(restaurantImage)
+                Log.d("qwerty123", it.toString());
             }
         }
     }
