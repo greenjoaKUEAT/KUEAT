@@ -1,20 +1,29 @@
 package com.example.kueat.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.viewModels
+import androidx.core.content.ContextCompat.getColor
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.kueat.R
 import com.example.kueat.databinding.FragmentReviewBinding
 import com.example.kueat.`object`.Comment
+import com.example.kueat.ui.appeal.AppealArticleCommentAdapter
+import com.example.kueat.ui.appeal.LikedArticle
 import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import java.text.SimpleDateFormat
@@ -26,9 +35,12 @@ class ReviewFragment : Fragment() {
     lateinit var dbComment : DatabaseReference
     lateinit var commentAdapter: MyCommentAdapter
     lateinit var layoutManager: LinearLayoutManager
+    lateinit var restaurantLikeDBReference: DatabaseReference
+    lateinit var commentLikeDBReference : DatabaseReference
     var review_id = ""
     val user = Firebase.auth.currentUser
     var num = 0
+    var isLikedArticle = false
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,6 +71,32 @@ class ReviewFragment : Fragment() {
         val option = FirebaseRecyclerOptions.Builder<Comment>()
             .setQuery(query, Comment::class.java).build()
         commentAdapter = MyCommentAdapter(option)
+        //게시글 좋아요
+        restaurantLikeDBReference = Firebase.database.getReference("KueatDB/LikedArticle")
+        restaurantLikeDBReference.child(review_id + user!!.uid).get().addOnSuccessListener {
+            isLikedArticle = it.exists()
+            if(isLikedArticle)
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.pink))
+        }
+        binding!!.likeImage.setOnClickListener {
+            if (isLikedArticle) {
+                restaurantLikeDBReference.child(review_id + user!!.uid).removeValue()
+                binding!!.tvAppealArticleLike.text =  (binding!!.tvAppealArticleLike.text.toString().toInt()- 1).toString()
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.black))
+            } else {
+                restaurantLikeDBReference.child(review_id + user!!.uid).setValue(
+                    LikedArticle(
+                        review_id,
+                        user!!.uid,
+                        review_id + user!!.uid
+                    )
+                )
+                binding!!.tvAppealArticleLike.text =  (binding!!.tvAppealArticleLike.text.toString().toInt() + 1).toString()
+                binding!!.tvAppealArticleLike.setTextColor(getColor(requireContext(),R.color.pink))
+            }
+            isLikedArticle = !isLikedArticle
+            dbReview.child(review_id).child("liked_user_number").setValue(binding!!.tvAppealArticleLike.text.toString().toInt())
+        }
 
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
@@ -79,8 +117,44 @@ class ReviewFragment : Fragment() {
                 binding!!.tvAppealArticleComment.text = num.toString()
                 commentAdapter.startListening()
             }
+
             binding!!.commentEdit.text.clear()
         }
+        // 댓글 좋아요
+        commentLikeDBReference = Firebase.database.getReference("KueatDB/LikedComment")
+        commentAdapter.itemClickListener= object : MyCommentAdapter.OnItemClickListener{
+            override fun OnItemClick(pos: Int) {
+                val c = commentAdapter.getItem(pos)
+                dbComment.child(c.comment_id).runTransaction(object : Transaction.Handler {
+                    override fun doTransaction(currentData: MutableData): Transaction.Result {
+                        val p = currentData.getValue(Comment::class.java)
+                        Log.d("qwerty123", p.toString())
+
+                        if (p!!.liked_user.containsKey(user!!.uid)) {
+                            p!!.liked_user_number = p!!.liked_user_number - 1
+                            p!!.liked_user.remove(user!!.uid)
+                        } else {
+                            p!!.liked_user_number = p!!.liked_user_number + 1
+                            p!!.liked_user[user!!.uid] = true
+                        }
+
+                        currentData.value = p
+                        Log.d("qwerty123", currentData.value.toString())
+                        return Transaction.success(currentData)
+                    }
+
+                    override fun onComplete(
+                        error: DatabaseError?,
+                        committed: Boolean,
+                        currentData: DataSnapshot?
+                    ) {
+                        Log.d("qwerty123", error.toString())
+                    }
+                })
+            }
+        }
+
+
 
         binding!!.commentrecyclerView.layoutManager = layoutManager
         binding!!.commentrecyclerView.adapter = commentAdapter

@@ -25,6 +25,7 @@ import com.example.kueat.R
 import com.example.kueat.databinding.FragmentHomeBinding
 import com.example.kueat.`object`.Restaurant
 import com.example.kueat.`object`.location
+import com.example.kueat.sharedpreference.MyTag
 import com.example.kueat.ui.filter.FilterMenuFragment
 import com.example.kueat.viewmodel.MyUserModel
 import com.firebase.ui.database.FirebaseRecyclerOptions
@@ -53,16 +54,13 @@ class HomeFragment : Fragment() {
     lateinit var layoutManager: LinearLayoutManager
     lateinit var adapter: MyRestaurantAdapter
     lateinit var rdb: DatabaseReference
-    var Loc = ""
-    var Menu = ""
+    lateinit var sharedPref: MyTag
+    lateinit var Loc:String
+    lateinit var Menu:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        arguments?.let {
-            Loc = it.getString("Loc").toString().replace("\"","")
-            Menu = it.getString("Menu")!!.replace("\"","")
-        }
         //Toast.makeText(requireContext(), Loc +"나오나나오나??"+Menu,Toast.LENGTH_SHORT).show()
     }
 
@@ -78,8 +76,11 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragmentHomeMenu.text = Menu
-        binding.fragmentHomeLocation.text = Loc
+        sharedPref = context?.let { MyTag(it) }!!
+        Loc = sharedPref.getMyLoc(requireContext())
+        Menu = sharedPref.getMyMenu(requireContext())
+        binding.fragmentHomeLocation.text = "\"$Loc\""
+        binding.fragmentHomeMenu.text = "\"$Menu\""
 //        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
 
 
@@ -95,29 +96,7 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
     }
 
-//    val permissions = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION)
-//    fun getUserLocation(): location {
-//        var loc: location = location()
-//        Log.d("MainActivity","loc :0")
-//        if (permissions.all {
-//                ActivityCompat.checkSelfPermission(requireActivity(), it) == PackageManager.PERMISSION_GRANTED
-//            }) {
-//            fusedLocationClient.lastLocation
-//                .addOnSuccessListener { location: Location? ->
-//                    // Got last known location. In some rare situations this can be null.
-//                    var geocoder = Geocoder(requireActivity(), Locale.KOREA)
-//                    if (location != null) {
-//                        loc = location(location.latitude.toString(), location.longitude.toString())
-//                        Log.d("homeFragment","loc :${loc.Latitude}")
-//                        adapter.notifyDataSetChanged()
-//                    }
-//                }
-//            Log.d("homeFragment","loc :1")
-//        }else{
-//            Log.d("homeFragment","loc :2")
-//        }
-//        return loc
-//    }
+
     private fun init() {
 
         layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
