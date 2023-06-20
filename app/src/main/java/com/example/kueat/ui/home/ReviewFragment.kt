@@ -68,7 +68,7 @@ class ReviewFragment : Fragment() {
             val current = dataFormat.format(currentTime)
             val key = dbComment.push().key
             val item = Comment(key!!,user!!.uid,review_id,binding!!.commentEdit.text.toString(),
-            0,0,current)
+            0,0,current, mutableMapOf())
             dbComment.child(key!!).setValue(item)
 
             dbReview.child(review_id.toString()).get().addOnSuccessListener {
