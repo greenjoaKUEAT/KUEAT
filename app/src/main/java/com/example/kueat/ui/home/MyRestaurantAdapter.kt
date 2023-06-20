@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -77,6 +78,10 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
         }
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view =
             LikerowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -90,10 +95,14 @@ class MyRestaurantAdapter(options: FirebaseRecyclerOptions<Restaurant>,val activ
 
         holder.binding.apply {
 //            restaurantImage.setImageResource(getUrl(model.photo))
-            val imageUrl = model.photo
-            Glide.with(restaurantImage)
-                .load(imageUrl)
-                .into(restaurantImage)
+            var firebaseStorage = FirebaseStorage.getInstance()
+            Log.d("qwerty123", firebaseStorage.toString())
+            var firebaseStorageRef = firebaseStorage.getReference(model.photo)
+            Log.d("qwerty123", model.photo.toString())
+            var url = firebaseStorageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(activity.applicationContext).load(it).dontAnimate().into(restaurantImage)
+                Log.d("qwerty123", it.toString())
+            }
 
             textRestaurantName.text = model.name
             textTag.text = "#${model.tag_location} #${model.tag_type}"

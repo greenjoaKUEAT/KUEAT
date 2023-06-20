@@ -125,8 +125,8 @@ class HomeFragment : Fragment() {
                     .replace(R.id.main_frm, restaurantFragment).commit()*/
             }
         }
-
         binding.fragmentHomeRecyclerView.layoutManager = layoutManager
+        binding.fragmentHomeRecyclerView.itemAnimator = null
         binding.fragmentHomeRecyclerView.adapter = adapter
     }
 
