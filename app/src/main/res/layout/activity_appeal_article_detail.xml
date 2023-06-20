@@ -77,8 +77,7 @@
                 android:id="@+id/tv_appeal_article_detail_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="10dp"
+                android:layout_margin="10dp"
                 android:text=""
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -141,8 +140,7 @@
                 android:id="@+id/rv_appeal_article_comment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="10dp"
+                android:layout_margin="10dp"
                 android:nestedScrollingEnabled="false" />
 
         </LinearLayout>
