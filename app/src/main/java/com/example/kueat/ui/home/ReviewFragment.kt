@@ -108,7 +108,9 @@ class ReviewFragment : Fragment() {
 
         layoutManager = LinearLayoutManager(activity,LinearLayoutManager.VERTICAL,false)
         binding!!.enter.setOnClickListener {
-            commentAdapter.stopListening()
+            //commentAdapter.stopListening()
+            Log.d("reviewFragment","ff")
+
             val currentTime = Calendar.getInstance().time
             val dataFormat = SimpleDateFormat("MM/dd HH:mm")
             val current = dataFormat.format(currentTime)
@@ -123,7 +125,7 @@ class ReviewFragment : Fragment() {
                 num +=1
                 dbReview.child(review_id.toString()).child("comment_number").setValue(num)
                 binding!!.tvAppealArticleComment.text = num.toString()
-                commentAdapter.startListening()
+                //commentAdapter.startListening()
             }
 
             binding!!.commentEdit.text.clear()
