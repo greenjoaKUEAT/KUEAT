@@ -97,6 +97,8 @@ class LikeFragment : Fragment() {
             withContext(Dispatchers.IO) {
                 dbLikeRestaurant.get().addOnCompleteListener {
                     if (it.isSuccessful) {
+                        likeArr.clear()
+
                         for (data in it.result.children) {
                             Log.e(
                                 TAG,
@@ -116,6 +118,7 @@ class LikeFragment : Fragment() {
                 withContext(Dispatchers.IO) {
                     dbRestaurant.get().addOnCompleteListener {
                         if (it.isSuccessful) {
+                            restaurantArr.clear()
                             for (data in it.result.children) {
                                 Log.e(
                                     TAG,
@@ -162,6 +165,13 @@ class LikeFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+//        initRecycler()
+        initLikeRestaurant()
+        Log.d(TAG,"resume")
+
+    }
     override fun onStop() {
         super.onStop()
         try {
